@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Your Urbana Fashion order has been confirmed. Thank you for shopping with us!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Urbana Fashion</title>
+    <link rel="stylesheet" href="urbana.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+<div id="header"></div>
+
+<div class="confirm-page">
+
+    <!-- SUCCESS HEADER -->
+    <div class="success-header">
+        <div class="check-circle">
+            <i data-lucide="check" style="width:32px;height:32px;color:#4caf50;stroke-width:2.5;"></i>
+        </div>
+        <div class="success-title">Order Confirmed!</div>
+        <div class="success-sub">
+            Thank you for your purchase. Your order <strong id="order-id">ORD-000000</strong> has been placed.
+        </div>
+    </div>
+
+    <!-- ITEMS ORDERED -->
+    <div class="card">
+        <div class="card-label">
+            <i data-lucide="shopping-bag" style="width:13px;height:13px;"></i>
+            Items Ordered
+        </div>
+        <div id="order-items"><!-- JS --></div>
+        <div class="totals">
+            <div class="total-row"><span>Subtotal</span><span id="t-sub">₹0</span></div>
+            <div class="total-row savings" id="t-savings-row" style="display:none;"><span>Discount</span><span id="t-savings">-₹0</span></div>
+            <div class="total-row"><span>Shipping</span><span id="t-shipping" style="font-weight:700;">₹49</span></div>
+            <div class="total-row grand"><span>Total Paid</span><span id="t-grand">₹0</span></div>
+        </div>
+    </div>
+
+    <!-- SHIPPING ADDRESS -->
+    <div class="card">
+        <div class="card-label">
+            <i data-lucide="map-pin" style="width:13px;height:13px;"></i>
+            Shipping Address
+        </div>
+        <div class="addr-name" id="addr-name">—</div>
+        <div class="addr-line" id="addr-line">—</div>
+        <div class="addr-line" id="addr-contact" style="margin-top:6px;">—</div>
+        <div style="margin-top:8px;">
+            <span style="font-size:12px;color:#888;">Payment: </span>
+            <span style="font-size:12px;font-weight:700;color:#1a1a1a;" id="pay-method">—</span>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+        <a href="ordertracking.html" class="btn-primary">TRACK ORDER</a>
+        <a href="index.html" class="btn-secondary">CONTINUE SHOPPING</a>
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="footer"></div>
+<script src="common.js"></script>
+<script>
+/* ── CONFETTI ── */
+function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const COLORS = ['#c9973a', '#1a1a1a', '#f0ede8', '#e8d5b0', '#4caf50'];
+    const pieces = Array.from({ length: 100 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        w: Math.random() * 9 + 5, h: Math.random() * 5 + 3,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        rot: Math.random() * 360, speed: Math.random() * 3 + 2,
+        rotSpeed: (Math.random() - 0.5) * 4, drift: (Math.random() - 0.5) * 1.2,
+    }));
+    let frame = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+            ctx.save();
+            ctx.translate(p.x + p.w/2, p.y + p.h/2);
+            ctx.rotate(p.rot * Math.PI / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, 1 - frame / 160);
+            ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+            ctx.restore();
+            p.y += p.speed; p.x += p.drift; p.rot += p.rotSpeed;
+        });
+        frame++;
+        if (frame < 200) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    setTimeout(draw, 200);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadLayout();
+    launchConfetti();
+
+    /* Order ID */
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const id = 'ORD-' + Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+    document.getElementById("order-id").textContent = id;
+    window._orderId = id;
+
+    /* Pull order data from checkout */
+    const order = JSON.parse(sessionStorage.getItem("urbana-order")) || {};
+    const cart  = JSON.parse(localStorage.getItem("urbana-cart"))   || [];
+
+    /* Address */
+    const name = [order.fname, order.lname].filter(Boolean).join(" ") || "Your Name";
+    document.getElementById("addr-name").textContent = name;
+
+    const addrParts = [order.addr1, order.city, order.state, order.pin].filter(Boolean);
+    document.getElementById("addr-line").textContent = addrParts.join(", ") || "Your delivery address";
+    document.getElementById("addr-contact").textContent =
+        [order.mobile, order.email].filter(Boolean).join(" · ") || "";
+
+    const payLabels = { cod:"Cash on Delivery", upi:"UPI", card:"Credit / Debit Card", netbanking:"Net Banking" };
+    document.getElementById("pay-method").textContent = payLabels[order.payment] || "Cash on Delivery";
+
+    /* Items */
+    renderItems(cart, order.savings || 0, order.subtotal || 0, order);
+
+    /* Save order to dashboard history */
+    const orders = JSON.parse(localStorage.getItem("urbana-orders")) || [];
+    const now = new Date();
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const dateStr = now.getDate() + " " + monthNames[now.getMonth()] + " " + now.getFullYear();
+    if (cart.length > 0) {
+        cart.forEach(item => {
+            orders.unshift({
+                id: window._orderId,
+                name: item.product?.name || "Product",
+                meta: "Size: " + (item.size || item.product?.size || "M") + " · Qty: " + (item.quantity || 1),
+                price: "₹" + ((item.product?.price || 0) * (item.quantity || 1)),
+                image: item.product?.image || null,
+                emoji: "👕",
+                status: "Processing",
+                statusClass: "s-processing",
+                date: dateStr
+            });
+        });
+    } else {
+        orders.unshift({
+            id: window._orderId,
+            name: "Urbana Order",
+            meta: "Qty: 1",
+            price: "₹499",
+            emoji: "👕",
+            status: "Processing",
+            statusClass: "s-processing",
+            date: dateStr
+        });
+    }
+    localStorage.setItem("urbana-orders", JSON.stringify(orders));
+
+    /* Clear */
+    localStorage.removeItem("urbana-cart");
+    sessionStorage.removeItem("urbana-order");
+    if (typeof updateBadges === "function") updateBadges();
+
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 200);
+});
+
+function renderItems(cart, savings, storedSub, order = {}) {
+    const container = document.getElementById("order-items");
+    let subtotal = 0;
+
+    if (!cart.length) {
+        container.innerHTML = `<div class="order-item">
+            <div class="item-img">👕</div>
+            <div class="item-info">
+                <div class="item-name">Urbana Classic T-Shirt</div>
+                <div class="item-meta">Size: M · Qty: 1</div>
+            </div>
+            <div class="item-price">₹499</div>
+        </div>`;
+        subtotal = storedSub || 499;
+    } else {
+        container.innerHTML = cart.map(item => {
+            const price = (item.product?.price || 0) * (item.quantity || 1);
+            subtotal += price;
+            const img = item.product?.image
+                ? `<img src="${item.product.image}" alt="${item.product.name}">`
+                : '👕';
+            return `<div class="order-item">
+                <div class="item-img">${img}</div>
+                <div class="item-info">
+                    <div class="item-name">${item.product?.name || 'Product'}</div>
+                    <div class="item-meta">Size: ${item.size || 'M'} · Qty: ${item.quantity || 1}</div>
+                </div>
+                <div class="item-price">₹${price.toLocaleString('en-IN')}</div>
+            </div>`;
+        }).join('');
+        subtotal = storedSub || subtotal;
+    }
+
+    const shipping = (order.shipping !== undefined) ? order.shipping : ((subtotal - (savings || 0)) >= 999 ? 0 : 49);
+    const grand = subtotal - (savings || 0) + shipping;
+
+    document.getElementById("t-sub").textContent   = "₹" + subtotal.toLocaleString("en-IN");
+    document.getElementById("t-grand").textContent = "₹" + grand.toLocaleString("en-IN");
+
+    const shipEl = document.getElementById("t-shipping");
+    if (shipEl) {
+        shipEl.textContent = shipping === 0 ? "FREE 🎉" : "₹" + shipping;
+        shipEl.style.color = shipping === 0 ? "#4caf50" : "#1a1a1a";
+    }
+
+    if (savings > 0) {
+        document.getElementById("t-savings-row").style.display = "flex";
+        document.getElementById("t-savings").textContent = "-₹" + savings.toLocaleString("en-IN");
+    }
+}
+</script>
+</body>
+</html>

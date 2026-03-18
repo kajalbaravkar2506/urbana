@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Find your nearest Urbana Fashion store across India.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Store Locator - Urbana Fashion</title>
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div id="header"></div>
+<div class="page-wrapper">
+    <div class="page-title">Store Locator</div>
+    <div class="page-subtitle">Find an Urbana store near you</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search by city or pin code..." id="store-search" oninput="filterStores()">
+        <button onclick="filterStores()">SEARCH</button>
+    </div>
+
+    <div class="stores-grid" id="stores-grid"></div>
+</div>
+<div id="footer"></div>
+<script src="common.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{ if(typeof loadLayout==="function") loadLayout(); setTimeout(()=>{ if(window.lucide) lucide.createIcons(); },300); renderStores(); });
+
+const stores = [
+    { city:"Mumbai", name:"Urbana — Bandra West", address:"Shop 12, Linking Road, Bandra West, Mumbai 400050", phone:"+91 98765 43210", hours:"10am – 9pm", open:true },
+    { city:"Mumbai", name:"Urbana — Andheri", address:"Ground Floor, Infinity Mall, Andheri West, Mumbai 400053", phone:"+91 98765 43211", hours:"11am – 10pm", open:true },
+    { city:"Delhi", name:"Urbana — Connaught Place", address:"Block A, Connaught Place, New Delhi 110001", phone:"+91 98765 43212", hours:"10am – 9pm", open:true },
+    { city:"Delhi", name:"Urbana — Lajpat Nagar", address:"Central Market, Lajpat Nagar II, New Delhi 110024", phone:"+91 98765 43213", hours:"10am – 8pm", open:false },
+    { city:"Bangalore", name:"Urbana — Indiranagar", address:"100 Feet Road, Indiranagar, Bangalore 560038", phone:"+91 98765 43214", hours:"10am – 9pm", open:true },
+    { city:"Bangalore", name:"Urbana — Koramangala", address:"80 Feet Road, Koramangala 4th Block, Bangalore 560034", phone:"+91 98765 43215", hours:"11am – 9pm", open:true },
+    { city:"Chennai", name:"Urbana — T. Nagar", address:"Pondy Bazaar, T. Nagar, Chennai 600017", phone:"+91 98765 43216", hours:"10am – 9pm", open:true },
+    { city:"Hyderabad", name:"Urbana — Banjara Hills", address:"Road No. 12, Banjara Hills, Hyderabad 500034", phone:"+91 98765 43217", hours:"10am – 9pm", open:false },
+    { city:"Pune", name:"Urbana — FC Road", address:"Ferguson College Road, Shivajinagar, Pune 411005", phone:"+91 98765 43218", hours:"10am – 9pm", open:true },
+    { city:"Kolkata", name:"Urbana — Park Street", address:"22 Park Street, Kolkata 700016", phone:"+91 98765 43219", hours:"10am – 8pm", open:true },
+];
+
+function renderStores(filtered){
+    const list = filtered || stores;
+    const grid = document.getElementById("stores-grid");
+    if(list.length === 0){
+        grid.innerHTML = `<p style="color:#999;font-size:14px;padding:20px 0;">No stores found for that location.</p>`;
+        return;
+    }
+    grid.innerHTML = list.map(s => `
+        <div class="store-card">
+            <div class="store-city">${s.city}</div>
+            <div class="store-name">${s.name}</div>
+            <div class="store-detail"><i data-lucide="map-pin"></i>${s.address}</div>
+            <div class="store-detail"><i data-lucide="phone"></i>${s.phone}</div>
+            <div class="store-detail"><i data-lucide="clock"></i>${s.hours}</div>
+            <span class="store-badge ${s.open ? 'open' : 'closed'}">${s.open ? 'OPEN NOW' : 'CLOSED'}</span>
+        </div>
+    `).join("");
+    setTimeout(()=>{ if(window.lucide) lucide.createIcons(); }, 100);
+}
+
+function filterStores(){
+    const q = document.getElementById("store-search").value.trim().toLowerCase();
+    if(!q){ renderStores(); return; }
+    renderStores(stores.filter(s => s.city.toLowerCase().includes(q) || s.address.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Your Urbana wishlist. Save your favourite styles for later.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Wishlist - Urbana Fashion</title>
+
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="wishlist-page">
+
+    <h1 class="heading" id="wish-heading" style="display:none;">
+        Wishlist &nbsp;<span style="color:#999;font-weight:500;font-size:20px;">(<span id="wish-count">0</span> items)</span>
+    </h1>
+
+    <div class="wishlist-grid" id="wishlist-grid"></div>
+
+    <div class="empty-wishlist" id="empty-wishlist" style="display:none;">
+        <i data-lucide="heart" style="width:64px;height:64px;stroke:#ddd;"></i>
+        <div class="empty-text">Your wishlist is empty</div>
+        <div class="empty-subtext">Save items you love and come back to them anytime.</div>
+        <a href="index.html" class="empty-btn">START SHOPPING</a>
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    if(typeof loadLayout === "function") loadLayout();
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 300);
+});
+</script>
+
+<script>
+const SIZES = {
+    default:    ["XS","S","M","L","XL","XXL"],
+    bottomwear: ["28","30","32","34","36"],
+    leggings:   ["S","M","L","XL"],
+    kids:       ["2Y","4Y","6Y","8Y","10Y","12Y"],
+};
+
+function getSizes(product){
+    if(product.section === "boys" || product.section === "girls") return SIZES.kids;
+    if(product.type === "leggings") return SIZES.leggings;
+    if(product.category === "bottomwear") return SIZES.bottomwear;
+    return SIZES.default;
+}
+
+function removeFromWishlist(idx){
+    let wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    wishlist.splice(idx, 1);
+    localStorage.setItem("urbana-wishlist", JSON.stringify(wishlist));
+    renderWishlist();
+    if(typeof updateBadges === "function") updateBadges();
+}
+
+function addToCart(idx){
+    const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    const product  = wishlist[idx];
+    const sizeEl   = document.getElementById("size-select-" + idx);
+    const size     = sizeEl ? sizeEl.value : "";
+
+    if(!size){
+        showToast("Please select a size first!");
+        return;
+    }
+
+    const disc     = product.discount || 0;
+    const price    = disc ? Math.round(product.price - (product.price * disc / 100)) : product.price;
+
+    let cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
+    const existing = cart.find(item => item.product.id === product.id && item.size === size);
+
+    if(existing){
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            product: { id: product.id, name: product.name, image: product.image, price, discount: disc },
+            size,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("urbana-cart", JSON.stringify(cart));
+    if(typeof updateBadges === "function") updateBadges();
+    showToast("✓ Added to cart!");
+}
+
+function goToProduct(product){
+    const params = new URLSearchParams({
+        id:       product.id || "",
+        name:     product.name,
+        image:    product.image,
+        price:    product.price,
+        discount: product.discount || 0,
+        rating:   product.rating   || 4.5,
+        section:  product.section  || "",
+        category: product.category || "",
+        type:     product.type     || "",
+        colour:   product.colour   || "",
+    });
+    window.location.href = `product.html?${params.toString()}`;
+}
+
+function renderWishlist(){
+    const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+
+    const heading = document.getElementById("wish-heading");
+    const grid    = document.getElementById("wishlist-grid");
+    const empty   = document.getElementById("empty-wishlist");
+
+    if(wishlist.length === 0){
+        heading.style.display = "none";
+        grid.innerHTML        = "";
+        empty.style.display   = "flex";
+        setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 100);
+        return;
+    }
+
+    heading.style.display = "block";
+    empty.style.display   = "none";
+    document.getElementById("wish-count").textContent = wishlist.length;
+
+    grid.innerHTML = wishlist.map((p, idx) => {
+
+        const disc     = p.discount || 0;
+        const newPrice = disc ? Math.round(p.price - (p.price * disc / 100)) : p.price;
+        const sizes    = getSizes(p);
+
+        return `
+        <div class="wishlist-card">
+
+            <div class="card-image" onclick="goToProduct(${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                <img src="${p.image}" alt="${p.name}">
+                ${disc ? `<span class="discount-badge">-${disc}%</span>` : ""}
+                <button class="remove-wish" onclick="event.stopPropagation(); removeFromWishlist(${idx})" title="Remove">
+                    <i data-lucide="x" style="width:14px;height:14px;stroke:#555;"></i>
+                </button>
+            </div>
+
+            <div class="card-info">
+                <div class="card-name">${p.name}</div>
+
+                <div class="card-prices">
+                    <span class="card-price-new">₹${newPrice}</span>
+                    ${disc ? `<span class="card-price-old">₹${p.price}</span>
+                    <span class="card-save">${disc}% off</span>` : ""}
+                </div>
+
+                <div class="card-size-row">
+                    <span class="card-size-label">SIZE</span>
+                    <select class="card-size-select" id="size-select-${idx}">
+                        <option value="">Select</option>
+                        ${sizes.map(s => `<option value="${s}">${s}</option>`).join("")}
+                    </select>
+                </div>
+
+                <button class="add-cart-btn" onclick="addToCart(${idx})">
+                    <i data-lucide="shopping-bag" style="width:14px;height:14px;"></i>
+                    MOVE TO CART
+                </button>
+            </div>
+
+        </div>
+        `;
+    }).join("");
+
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 100);
+}
+
+renderWishlist();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" id="cat-meta-desc" content="Browse our full fashion collection at Urbana. Filter by style, price and size.">
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<title>Shop - Urbana Fashion</title>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="main-wrapper">
+
+<div class="filters-sidebar">
+
+<h3>FILTERS</h3>
+
+<h4>COLOUR</h4>
+<label><input type="checkbox" class="colour" value="black"> Black</label>
+<label><input type="checkbox" class="colour" value="blue"> Blue</label>
+<label><input type="checkbox" class="colour" value="white"> White</label>
+<label><input type="checkbox" class="colour" value="grey"> Grey</label>
+<label><input type="checkbox" class="colour" value="pink"> Pink</label>
+<label><input type="checkbox" class="colour" value="green"> Green</label>
+<label><input type="checkbox" class="colour" value="purple"> Purple</label>
+
+<h4>PRICE</h4>
+<label><input type="checkbox" class="price" value="low"> Under ₹500</label>
+<label><input type="checkbox" class="price" value="mid"> ₹500–₹1000</label>
+<label><input type="checkbox" class="price" value="high"> Above ₹1000</label>
+
+<h4>DISCOUNT</h4>
+<label><input type="checkbox" class="discount" value="10"> 10%+</label>
+<label><input type="checkbox" class="discount" value="30"> 30%+</label>
+<label><input type="checkbox" class="discount" value="50"> 50%+</label>
+
+</div>
+
+<div class="products" id="product-container"></div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+<script src="category.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    loadLayout();
+    const params = new URLSearchParams(window.location.search);
+    const section = params.get("section");
+    loadProducts(section);
+});
+</script>
+
+</body>
+</html>

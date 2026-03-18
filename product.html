@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" id="page-meta-desc" content="Shop this product at Urbana Fashion.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title id="page-title">Urbana Fashion</title>
+
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+    <script type="application/ld+json" id="product-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "",
+      "description": "",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "INR",
+        "price": "",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="product-page">
+
+    <a class="back-link" id="back-btn" href="#">
+        <i data-lucide="arrow-left" style="width:15px;height:15px;"></i>
+        Back to shop
+    </a>
+
+    <div class="product-layout">
+
+        <!-- IMAGE -->
+        <div class="image-panel">
+            <img id="product-img" src="" alt="Product">
+            <span class="discount-badge" id="discount-badge"></span>
+        </div>
+
+        <!-- INFO -->
+        <div class="info-panel">
+
+            <div class="product-section-label" id="product-section"></div>
+            <h1 class="product-title" id="product-name">Loading...</h1>
+
+            <div class="rating-row">
+                <div class="stars" id="stars-display"></div>
+                <span class="rating-text" id="rating-text"></span>
+            </div>
+
+            <div class="price-row">
+                <span class="price-new" id="price-new"></span>
+                <span class="price-old" id="price-old"></span>
+                <span class="price-save" id="price-save"></span>
+            </div>
+
+            <p class="product-desc" id="product-desc"></p>
+
+            <!-- SIZE -->
+            <div class="label-row">SELECT SIZE</div>
+            <div class="sizes" id="sizes-container"></div>
+
+            <!-- QUANTITY -->
+            <div class="qty-label">QUANTITY</div>
+            <div class="qty-box">
+                <button onclick="changeQty(-1)">−</button>
+                <span id="qty-display">1</span>
+                <button onclick="changeQty(1)">+</button>
+            </div>
+
+            <!-- STOCK -->
+            <div class="stock-status">
+                <i data-lucide="check-circle" style="width:15px;height:15px;"></i>
+                In Stock
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="action-row">
+                <button class="add-to-cart-btn" onclick="addToCart()">
+                    <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i>
+                    ADD TO CART
+                </button>
+                <button class="wishlist-btn" id="wishlist-btn" onclick="toggleWishlist()" title="Add to Wishlist">
+                    <i data-lucide="heart" style="width:20px;height:20px;stroke:#333;"></i>
+                </button>
+            </div>
+
+            <!-- TRUST BADGES -->
+            <div class="trust-badges">
+                <div class="badge">
+                    <i data-lucide="truck"></i>
+                    Free Delivery
+                </div>
+                <div class="badge">
+                    <i data-lucide="refresh-cw"></i>
+                    Easy Returns
+                </div>
+                <div class="badge">
+                    <i data-lucide="shield-check"></i>
+                    Genuine Product
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ── REVIEWS SECTION ── -->
+<div class="reviews-section">
+    <div class="reviews-inner">
+
+        <!-- LEFT: Summary + Write Review -->
+        <div class="reviews-left">
+            <div class="rating-summary">
+                <div class="big-rating" id="avg-rating-display">0.0</div>
+                <div class="big-stars" id="avg-stars-display"></div>
+                <div class="total-reviews" id="total-reviews-display">No reviews yet</div>
+                <div class="rating-bars" id="rating-bars"></div>
+            </div>
+            <div class="write-review">
+                <h3 class="review-form-title">WRITE A REVIEW</h3>
+                <div class="star-picker" id="star-picker">
+                    <span onclick="setRating(1)">&#9733;</span>
+                    <span onclick="setRating(2)">&#9733;</span>
+                    <span onclick="setRating(3)">&#9733;</span>
+                    <span onclick="setRating(4)">&#9733;</span>
+                    <span onclick="setRating(5)">&#9733;</span>
+                </div>
+                <div class="rating-hint" id="rating-hint">Tap to rate</div>
+                <input type="text" class="review-input" id="review-name" placeholder="Your name">
+                <textarea class="review-textarea" id="review-comment" placeholder="Share your experience with this product..."></textarea>
+                <button class="review-submit-btn" onclick="submitReview()">POST REVIEW</button>
+            </div>
+        </div>
+
+        <!-- RIGHT: Reviews List -->
+        <div class="reviews-right">
+            <h3 class="reviews-list-title">CUSTOMER REVIEWS</h3>
+            <div id="reviews-list"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    if(typeof loadLayout === "function") loadLayout();
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 300);
+});
+</script>
+
+<script>
+// ── PRODUCT DESCRIPTIONS ──
+const DESCRIPTIONS = {
+    default: "Premium quality fabric, crafted for everyday comfort and style. Designed to keep you looking fresh all day.",
+    tshirt:  "Soft cotton blend t-shirt with a relaxed fit. Breathable and lightweight for everyday wear.",
+    jeans:   "Classic slim-fit denim with stretch fabric for ease of movement. Versatile for any occasion.",
+    dress:   "Elegant design with a flattering silhouette. Perfect for casual outings or special occasions.",
+    top:     "Stylish and comfortable top, easy to pair with any bottom wear. Great for everyday looks.",
+    kurta:   "Traditional design meets modern comfort. Made with premium fabric for a refined look.",
+    shorts:  "Lightweight and breathable shorts perfect for warm days and active lifestyles.",
+    leggings:"Super soft, high-stretch leggings for all-day comfort. Great for workouts or casual wear.",
+    frock:   "Adorable and comfortable frock with a playful design. Perfect for little ones.",
+    skirt:   "Flowy and stylish skirt that pairs beautifully with tops and blouses.",
+    jumpsuit:"Trendy one-piece jumpsuit with a modern cut. Easy to style and comfortable to wear.",
+    ethnic:  "Beautiful ethnic set with intricate detailing. Perfect for festivals and celebrations.",
+};
+
+const SIZES = {
+    default:  ["XS","S","M","L","XL","XXL"],
+    bottomwear: ["28","30","32","34","36"],
+    jeans:    ["28","30","32","34","36"],
+    shorts:   ["S","M","L","XL"],
+    leggings: ["S","M","L","XL"],
+    kids:     ["2Y","4Y","6Y","8Y","10Y","12Y"],
+};
+
+// ── STATE ──
+let qty = 1;
+let selectedSize = "";
+let product = null;
+let inWishlist = false;
+
+// ── LOAD PRODUCT FROM URL PARAMS ──
+function loadProduct(){
+    const params = new URLSearchParams(window.location.search);
+
+    product = {
+        id:       params.get("id") || "product",
+        name:     params.get("name") || "Product",
+        image:    params.get("image") || "",
+        price:    parseInt(params.get("price")) || 0,
+        discount: parseInt(params.get("discount")) || 0,
+        rating:   parseFloat(params.get("rating")) || 4.5,
+        section:  params.get("section") || "",
+        category: params.get("category") || "",
+        type:     params.get("type") || "",
+        colour:   params.get("colour") || "",
+    };
+
+    // Back button goes to the right section
+    const backURL = product.section
+        ? `category.html?section=${product.section}`
+        : "index.html";
+    document.getElementById("back-btn").href = backURL;
+
+    // Image
+    document.getElementById("product-img").src = product.image;
+    document.getElementById("product-img").alt = product.name;
+
+    // Section label
+    document.getElementById("product-section").textContent = product.section.toUpperCase();
+
+    // Name
+    document.getElementById("product-name").textContent = product.name;
+
+    // Rating stars — always from original product data, never overwritten
+    const r = product.rating;
+    let starsHTML = "";
+    for(let i = 1; i <= 5; i++){
+        starsHTML += i <= Math.floor(r)
+            ? "★"
+            : `<span class="empty">☆</span>`;
+    }
+    document.getElementById("stars-display").innerHTML = starsHTML;
+
+    // Real review count = seeded defaults (3) + any user submitted reviews
+    const _userRevs  = JSON.parse(localStorage.getItem("reviews-" + (new URLSearchParams(window.location.search).get("id") || new URLSearchParams(window.location.search).get("name") || "product") + "-user")) || [];
+    const realCount  = 3 + _userRevs.length;
+    document.getElementById("rating-text").textContent = `${r} (${realCount} review${realCount !== 1 ? "s" : ""})`;
+
+    // Prices
+    const disc = product.discount;
+    const newPrice = disc ? Math.round(product.price - (product.price * disc / 100)) : product.price;
+    document.getElementById("price-new").textContent = "₹" + newPrice;
+
+    if(disc){
+        document.getElementById("price-old").textContent = "₹" + product.price;
+        document.getElementById("price-save").textContent = `${disc}% OFF`;
+    }
+
+    // Description
+    const type = product.type || "default";
+    const desc = DESCRIPTIONS[type] || DESCRIPTIONS.default;
+    document.getElementById("product-desc").textContent = desc;
+
+    // Sizes
+    let sizeSet = SIZES.default;
+    if(product.category === "bottomwear") sizeSet = SIZES.bottomwear;
+    if(product.type === "jeans")   sizeSet = SIZES.jeans;
+    if(product.type === "leggings") sizeSet = SIZES.leggings;
+    if(product.section === "boys" || product.section === "girls") sizeSet = SIZES.kids;
+
+    const sizesContainer = document.getElementById("sizes-container");
+    sizesContainer.innerHTML = sizeSet.map(s => `
+        <button class="size-btn" onclick="selectSize('${s}', this)">${s}</button>
+    `).join("");
+
+    // Discount badge
+    if(disc){
+        document.getElementById("discount-badge").textContent = `-${disc}% OFF`;
+    } else {
+        document.getElementById("discount-badge").style.display = "none";
+    }
+
+    // Check wishlist
+    const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    inWishlist = wishlist.some(w => w.id === product.id);
+    if(inWishlist) document.getElementById("wishlist-btn").classList.add("active");
+
+    // Re-init icons after dynamic render, then render reviews
+    setTimeout(() => {
+        if(window.lucide) lucide.createIcons();
+        renderReviews();
+    }, 150);
+}
+
+// ── SIZE SELECTION ──
+function selectSize(size, btn){
+    selectedSize = size;
+    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+}
+
+// ── QUANTITY ──
+function changeQty(delta){
+    qty = Math.max(1, Math.min(10, qty + delta));
+    document.getElementById("qty-display").textContent = qty;
+}
+
+// ── ADD TO CART ──
+function addToCart(){
+    if(!selectedSize){
+        showToast("Please select a size first!");
+        return;
+    }
+
+    const disc = product.discount;
+    const cartProduct = {
+        id:       product.id,
+        name:     product.name,
+        image:    product.image,
+        price:    disc ? Math.round(product.price - (product.price * disc / 100)) : product.price,
+        discount: disc,
+    };
+
+    let cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
+
+    const existing = cart.find(item => item.product.id === product.id && item.size === selectedSize);
+    if(existing){
+        existing.quantity += qty;
+    } else {
+        cart.push({ product: cartProduct, size: selectedSize, quantity: qty });
+    }
+
+    localStorage.setItem("urbana-cart", JSON.stringify(cart));
+    if(typeof updateBadges === "function") updateBadges();
+    showToast("✓ Added to cart!");
+}
+
+// ── WISHLIST TOGGLE ──
+function toggleWishlist(){
+    let wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    const btn = document.getElementById("wishlist-btn");
+
+    if(inWishlist){
+        wishlist = wishlist.filter(w => w.id !== product.id);
+        inWishlist = false;
+        btn.classList.remove("active");
+        showToast("Removed from wishlist");
+    } else {
+        wishlist.push(product);
+        inWishlist = true;
+        btn.classList.add("active");
+        showToast("♥ Added to wishlist!");
+    }
+
+    localStorage.setItem("urbana-wishlist", JSON.stringify(wishlist));
+    if(typeof updateBadges === "function") updateBadges();
+}
+
+// ── TOAST ──
+function showToast(msg){
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+// ── INIT ──
+loadProduct();
+
+
+// ── REVIEWS ──
+let selectedRating = 0;
+const HINTS = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
+
+// Seed reviews per product so pages aren't empty
+// Pick varied seed reviews based on product name so each product looks different
+function getSeedReviews(){
+    const name = (product && product.name) ? product.name.toLowerCase() : "";
+    const allSeeds = [
+        [
+            { name: "Priya S",   rating: 5, comment: "Absolutely love this! Great quality and fits perfectly.", date: "Feb 2026" },
+            { name: "Rohit M",   rating: 4, comment: "Good product, nice fabric. Delivery was quick too.", date: "Jan 2026" },
+            { name: "Ananya K",  rating: 5, comment: "Bought this for my daughter and she loves it. True to size!", date: "Jan 2026" },
+        ],
+        [
+            { name: "Meera P",   rating: 4, comment: "Really nice quality for the price. Would buy again!", date: "Feb 2026" },
+            { name: "Karan T",   rating: 5, comment: "Perfect fit and the colour is exactly as shown.", date: "Jan 2026" },
+            { name: "Divya R",   rating: 4, comment: "Good material, comfortable to wear all day.", date: "Dec 2025" },
+        ],
+        [
+            { name: "Sneha G",   rating: 5, comment: "Exceeded my expectations. Very happy with this purchase!", date: "Feb 2026" },
+            { name: "Arjun M",   rating: 3, comment: "Decent product but sizing runs a bit small.", date: "Jan 2026" },
+            { name: "Pooja V",   rating: 5, comment: "Lovely design and the stitching is really neat.", date: "Jan 2026" },
+        ],
+        [
+            { name: "Riya S",    rating: 4, comment: "Fast delivery and the product looks great in person.", date: "Feb 2026" },
+            { name: "Nikhil B",  rating: 5, comment: "Best purchase I made this month. Highly recommend!", date: "Feb 2026" },
+            { name: "Kavya L",   rating: 4, comment: "Nice and comfortable. Good value for money.", date: "Jan 2026" },
+        ],
+    ];
+    // Pick a seed set based on product name char code so it's consistent per product
+    const idx = name.charCodeAt(0) % allSeeds.length;
+    return allSeeds[idx];
+}
+// SEED_REVIEWS computed fresh each call inside getSeedReviews()
+
+function getReviewKey(){
+    const params = new URLSearchParams(window.location.search);
+    return "reviews-" + (params.get("id") || params.get("name") || "product");
+}
+
+function loadReviews(){
+    const key = getReviewKey();
+    let reviews = JSON.parse(localStorage.getItem(key));
+    if(!reviews){
+        // First visit — seed with reviews based on product
+        const seeds = getSeedReviews();
+        reviews = seeds.map(r => ({...r, seeded: true}));
+        localStorage.setItem(key, JSON.stringify(reviews));
+    }
+    return reviews;
+}
+
+function setRating(r){
+    selectedRating = r;
+    const stars = document.querySelectorAll("#star-picker span");
+    stars.forEach((s, i) => {
+        s.classList.toggle("active", i < r);
+    });
+    document.getElementById("rating-hint").textContent = HINTS[r];
+}
+
+function submitReview(){
+    const name    = document.getElementById("review-name").value.trim();
+    const comment = document.getElementById("review-comment").value.trim();
+
+    if(!selectedRating){ showToast("Please select a star rating!"); return; }
+    if(!name)           { showToast("Please enter your name!"); return; }
+    if(!comment)        { showToast("Please write a comment!"); return; }
+
+    const key     = getReviewKey();
+    const reviews = loadReviews();
+    const now     = new Date();
+    const month   = now.toLocaleString("default", { month: "short" }) + " " + now.getFullYear();
+
+    reviews.unshift({ name, rating: selectedRating, comment, date: month });
+    localStorage.setItem(key, JSON.stringify(reviews));
+
+    // Also track user-submitted separately
+    const userReviews = JSON.parse(localStorage.getItem(key + "-user")) || [];
+    userReviews.unshift({ name, rating: selectedRating, comment, date: month });
+    localStorage.setItem(key + "-user", JSON.stringify(userReviews));
+
+    // Reset form
+    document.getElementById("review-name").value    = "";
+    document.getElementById("review-comment").value = "";
+    selectedRating = 0;
+    document.querySelectorAll("#star-picker span").forEach(s => s.classList.remove("active"));
+    document.getElementById("rating-hint").textContent = "Tap to rate";
+
+    renderReviews();
+    showToast("✓ Review posted!");
+}
+
+function renderReviews(){
+    const reviews = loadReviews();
+    const listEl  = document.getElementById("reviews-list");
+    const avgEl   = document.getElementById("avg-rating-display");
+    const starsEl = document.getElementById("avg-stars-display");
+    const totalEl = document.getElementById("total-reviews-display");
+    const barsEl  = document.getElementById("rating-bars");
+
+    // Always use original product rating for the big number
+    const origRating = product ? product.rating : 4.5;
+    const fullStars  = Math.floor(origRating);
+    const halfStar   = origRating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStar;
+    avgEl.textContent  = origRating;
+    starsEl.innerHTML  = "★".repeat(fullStars) + (halfStar ? "½" : "") + "☆".repeat(emptyStars);
+
+    // Real count = seeded reviews + user submitted
+    const userReviews = JSON.parse(localStorage.getItem(getReviewKey() + "-user")) || [];
+    const totalCount  = reviews.length + userReviews.length;
+    totalEl.textContent = totalCount + " review" + (totalCount > 1 ? "s" : "");
+
+    if(reviews.length === 0){
+        listEl.innerHTML = '<div class="no-reviews">Be the first to review this product!</div>';
+        barsEl.innerHTML = "";
+        return;
+    }
+
+    // Bars
+    const counts = [0,0,0,0,0];
+    reviews.forEach(r => counts[r.rating - 1]++);
+    barsEl.innerHTML = [5,4,3,2,1].map(star => {
+        const pct = reviews.length ? Math.round((counts[star-1] / reviews.length) * 100) : 0;
+        return `<div class="bar-row">
+            <span>${star}★</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+            <span class="bar-count">${counts[star-1]}</span>
+        </div>`;
+    }).join("");
+
+    // Review cards
+    listEl.innerHTML = reviews.map(r => `
+        <div class="review-card">
+            <div class="review-card-top">
+                <span class="reviewer-name">${r.name}</span>
+                <span class="review-date">${r.date}</span>
+            </div>
+            <div class="review-stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+            <div class="review-text">${r.comment}</div>
+        </div>
+    `).join("");
+}
+
+// Init reviews on page load
+</script>
+
+
+    // Dynamic page title and meta for SEO
+    function updatePageMeta(name, description, price) {
+        document.title = (name ? name + ' - ' : '') + 'Urbana Fashion';
+        const metaDesc = document.getElementById('page-meta-desc');
+        if (metaDesc && description) metaDesc.setAttribute('content', description);
+        const schema = document.getElementById('product-schema');
+        if (schema && name) {
+            const data = JSON.parse(schema.textContent);
+            data.name = name;
+            data.description = description || '';
+            if (price) data.offers.price = price;
+            schema.textContent = JSON.stringify(data, null, 2);
+        }
+    }
+
+</body>
+</html>

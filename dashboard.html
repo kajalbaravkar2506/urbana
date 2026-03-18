@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Manage your Urbana account, orders, and wishlist.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Urbana Fashion</title>
+    <link rel="stylesheet" href="urbana.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="dash-page">
+    <div class="dash-top">
+        <div>
+            <div class="dash-title">MY ACCOUNT</div>
+            <div class="dash-welcome" id="dashWelcome">Welcome back</div>
+        </div>
+        <button class="dash-signout" onclick="logoutUser()">
+            <i data-lucide="log-out"></i> Sign Out
+        </button>
+    </div>
+
+    <div class="dash-body">
+        <aside class="dash-sidebar">
+            <button class="nav-item active" data-tab="overview"><i data-lucide="user"></i> Overview</button>
+            <button class="nav-item" data-tab="orders"><i data-lucide="package"></i> My Orders</button>
+            <button class="nav-item" data-tab="wishlist"><i data-lucide="heart"></i> Wishlist</button>
+            <button class="nav-item" data-tab="profile"><i data-lucide="pencil"></i> Profile</button>
+            <button class="nav-item" data-tab="addresses"><i data-lucide="map-pin"></i> Addresses</button>
+        </aside>
+
+        <div class="dash-content">
+
+            <!-- OVERVIEW -->
+            <div class="dash-panel active" id="tab-overview">
+                <div class="stat-cards">
+                    <div class="stat-card" onclick="switchTab('orders')">
+                        <div class="stat-num" id="ov-orders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card" onclick="switchTab('wishlist')">
+                        <div class="stat-num" id="ov-wish">0</div>
+                        <div class="stat-label">Wishlist Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="ov-since">—</div>
+                        <div class="stat-label">Member Since</div>
+                    </div>
+                </div>
+                <div class="dash-block">
+                    <div class="block-header">
+                        <div class="block-title">Recent Orders</div>
+                        <button class="block-link" onclick="switchTab('orders')">View All <i data-lucide="chevron-right"></i></button>
+                    </div>
+                    <div id="recent-orders-wrap"></div>
+                </div>
+                <div class="dash-block">
+                    <div class="block-header">
+                        <div class="block-title">Your Wishlist</div>
+                        <button class="block-link" onclick="switchTab('wishlist')">View All <i data-lucide="chevron-right"></i></button>
+                    </div>
+                    <div id="wishlist-preview"></div>
+                </div>
+            </div>
+
+            <!-- ORDERS -->
+            <div class="dash-panel" id="tab-orders">
+                <div class="dash-block">
+                    <div class="block-header"><div class="block-title">My Orders</div></div>
+                    <div id="orders-list-wrap"></div>
+                </div>
+            </div>
+
+            <!-- WISHLIST -->
+            <div class="dash-panel" id="tab-wishlist">
+                <div class="dash-block">
+                    <div class="block-header">
+                        <div class="block-title">Wishlist</div>
+                        <span id="wishlist-count-label" style="font-size:12px;color:#aaa;font-weight:600;"></span>
+                    </div>
+                    <div id="wishlist-full-wrap"></div>
+                </div>
+            </div>
+
+            <!-- PROFILE -->
+            <div class="dash-panel" id="tab-profile">
+                <div class="dash-block">
+                    <div class="block-header"><div class="block-title">My Profile</div></div>
+                    <div class="form-body">
+                        <div class="form-grid">
+                            <div class="form-group"><label>First Name</label><input type="text" id="pf-fname" placeholder="First name"></div>
+                            <div class="form-group"><label>Last Name</label><input type="text" id="pf-lname" placeholder="Last name"></div>
+                            <div class="form-group"><label>Email Address</label><input type="email" id="pf-email" placeholder="you@example.com"></div>
+                            <div class="form-group"><label>Mobile Number</label><input type="text" id="pf-mobile" placeholder="10-digit number"></div>
+                            <div class="form-group"><label>Date of Birth</label><input type="date" id="pf-dob"></div>
+                            <div class="form-group"><label>Gender</label><select id="pf-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
+                        </div>
+                        <button class="form-save" onclick="saveProfile()">SAVE CHANGES</button>
+                        <div class="save-ok" id="save-ok">✓ Profile updated</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDRESSES -->
+            <div class="dash-panel" id="tab-addresses">
+                <div class="dash-block">
+                    <div class="block-header"><div class="block-title">Saved Addresses</div></div>
+                    <div class="addr-grid">
+                        <div class="addr-card default-addr">
+                            <span class="addr-tag tag-home">🏠 Home</span>
+                            <div class="addr-name">Rahul Sharma</div>
+                            <div class="addr-text">14, Green Valley Apartments,Andheri West, Mumbai – 400058,Maharashtra</div>
+                            <div class="addr-phone">+91 98765 43210</div>
+                            <div class="addr-actions"><button class="addr-btn">Edit</button><button class="addr-btn del">Remove</button></div>
+                        </div>
+                        <div class="addr-card">
+                            <span class="addr-tag tag-work">🏢 Work</span>
+                            <div class="addr-name">Rahul Sharma</div>
+                            <div class="addr-text">Suite 402, Prestige Business Tower,MG Road, Bengaluru – 560001,Karnataka</div>
+                            <div class="addr-phone">+91 98765 43210</div>
+                            <div class="addr-actions"><button class="addr-btn">Edit</button><button class="addr-btn del">Remove</button></div>
+                        </div>
+                        <button class="addr-add" onclick="alert('Add address coming soon!')">
+                            <i data-lucide="plus-circle"></i><span>Add New Address</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="footer"></div>
+<script src="common.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const userRaw = localStorage.getItem("urbana-user");
+    if (!userRaw) { window.location.href = "login.html"; return; }
+    const user = JSON.parse(userRaw);
+    const name = user.name || "User";
+
+    document.getElementById("dashWelcome").textContent = "Welcome back, " + (user.email || user.mobile || name).toLowerCase();
+
+    const now = new Date();
+    const joined = user.joinedMonth || (now.toLocaleString("default", { month: "short" }) + " " + now.getFullYear());
+    document.getElementById("ov-since").textContent = joined;
+
+    const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    document.getElementById("ov-wish").textContent = wishlist.length;
+    document.getElementById("wishlist-count-label").textContent = wishlist.length + " item" + (wishlist.length !== 1 ? "s" : "");
+
+    const orders = JSON.parse(localStorage.getItem("urbana-orders")) || [];
+    document.getElementById("ov-orders").textContent = orders.length;
+
+    const parts = name.split(" ");
+    document.getElementById("pf-fname").value = parts[0] || "";
+    document.getElementById("pf-lname").value = parts.slice(1).join(" ") || "";
+    document.getElementById("pf-email").value = user.email || "";
+    document.getElementById("pf-mobile").value = user.mobile || "";
+
+    renderOrders(orders, "recent-orders-wrap", 2);
+    renderOrders(orders, "orders-list-wrap", 999);
+    renderWishlist(wishlist, "wishlist-preview", 4);
+    renderWishlist(wishlist, "wishlist-full-wrap", 999);
+
+    // Re-render if user navigates back to this page (e.g. after placing order)
+    window.addEventListener("focus", () => {
+        const freshOrders = JSON.parse(localStorage.getItem("urbana-orders")) || [];
+        const freshWishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+        document.getElementById("ov-orders").textContent = freshOrders.length;
+        document.getElementById("ov-wish").textContent = freshWishlist.length;
+        document.getElementById("wishlist-count-label").textContent = freshWishlist.length + " item" + (freshWishlist.length !== 1 ? "s" : "");
+        renderOrders(freshOrders, "recent-orders-wrap", 2);
+        renderOrders(freshOrders, "orders-list-wrap", 999);
+        renderWishlist(freshWishlist, "wishlist-preview", 4);
+        renderWishlist(freshWishlist, "wishlist-full-wrap", 999);
+    });
+
+    loadLayout();
+    lucide.createIcons();
+
+    document.querySelectorAll(".nav-item[data-tab]").forEach(btn => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    });
+    const hash = window.location.hash.replace("#", "");
+    if (hash) switchTab(hash);
+});
+
+function switchTab(tab) {
+    document.querySelectorAll(".dash-panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".nav-item[data-tab]").forEach(b => b.classList.remove("active"));
+    const panel = document.getElementById("tab-" + tab);
+    const btn = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+    if (panel) panel.classList.add("active");
+    if (btn) btn.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderOrders(orders, id, limit) {
+    const wrap = document.getElementById(id);
+    if (!wrap) return;
+    if (!orders.length) {
+        wrap.innerHTML = `<div class="empty-box"><i data-lucide="package"></i><p>No orders yet</p><a href="index.html">Start Shopping <i data-lucide="arrow-right"></i></a></div>`;
+        if (window.lucide) lucide.createIcons(); return;
+    }
+    wrap.innerHTML = orders.slice(0, limit).map(o => {
+        const thumb = o.image
+            ? `<img src="${o.image}" alt="${o.name}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">`
+            : (o.emoji || "👕");
+        return `<div class="order-row">
+            <div class="order-thumb">${thumb}</div>
+            <div class="order-info">
+                <div class="order-name">${o.name}</div>
+                <div class="order-meta">${o.meta || ""} ${o.id ? "· #" + o.id : ""}</div>
+                <div class="order-price">${o.price}</div>
+            </div>
+            <div class="order-right">
+                <span class="status-badge ${o.statusClass || "s-processing"}">${o.status || "Processing"}</span>
+                <span class="order-date">${o.date || ""}</span>
+                <div class="order-actions">
+                    <button class="btn-xs btn-xs-dark">REORDER</button>
+                    <button class="btn-xs btn-xs-out">INVOICE</button>
+                </div>
+            </div>
+        </div>`;
+    }).join("");
+    if (window.lucide) lucide.createIcons();
+}
+
+function renderWishlist(wishlist, id, limit) {
+    const wrap = document.getElementById(id);
+    if (!wrap) return;
+    if (!wishlist.length) {
+        wrap.innerHTML = `<div class="empty-box"><i data-lucide="heart"></i><p>Nothing saved yet</p><a href="wishlist.html">Go to Wishlist <i data-lucide="arrow-right"></i></a></div>`;
+        if (window.lucide) lucide.createIcons(); return;
+    }
+    wrap.innerHTML = `<div class="wish-grid">${wishlist.slice(0, limit).map(item => {
+        const img = item.image
+            ? `<img src="${item.image}" alt="${item.name || "Product"}">`
+            : "👗";
+        const price = item.price ? "₹" + item.price : (item.priceFormatted || "—");
+        return `<div class="wish-card">
+            <div class="wish-img">${img}</div>
+            <div class="wish-name">${item.name || "Product"}</div>
+            <div class="wish-price">${price}</div>
+            <button class="wish-btn" onclick="window.location.href='cart.html'">ADD TO BAG</button>
+        </div>`;
+    }).join("")}</div>`;
+    if (window.lucide) lucide.createIcons();
+}
+
+function saveProfile() {
+    const user = JSON.parse(localStorage.getItem("urbana-user")) || {};
+    const fname = document.getElementById("pf-fname").value.trim();
+    const lname = document.getElementById("pf-lname").value.trim();
+    user.name = (fname + " " + lname).trim() || user.name;
+    user.email = document.getElementById("pf-email").value.trim() || user.email;
+    user.mobile = document.getElementById("pf-mobile").value.trim() || user.mobile;
+    localStorage.setItem("urbana-user", JSON.stringify(user));
+    const ok = document.getElementById("save-ok");
+    ok.style.display = "block";
+    setTimeout(() => ok.style.display = "none", 3000);
+}
+
+function logoutUser() {
+    localStorage.removeItem("urbana-user");
+    window.location.href = "login.html";
+}
+</script>
+</body>
+</html>

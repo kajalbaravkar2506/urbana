@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Urbana Fashion - Fresh Styles for Men, Women, Boys & Girls</title>
+    <meta name="description" content="Shop trendy fashion for men, women, boys and girls at Urbana. Explore 1000+ styles under ₹999. Easy returns, free delivery.">
+    <link rel="stylesheet" type="text/css" href="urbana.css">
+    <link rel="icon" sizes="64x64" href="images/favicon.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Urbana Fashion",
+      "url": "https://www.urbanafashion.com",
+      "logo": "images/favicon.png",
+      "description": "Trendy fashion for men, women, boys and girls. 1000+ styles under ₹999.",
+      "sameAs": [
+        "https://www.instagram.com/urbanafashion",
+        "https://www.facebook.com/urbanafashion"
+      ]
+    }
+    </script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main id="main-content">
+
+    <div class="hero-wrapper">
+        <picture>
+            <source srcset="images/imageoffamily.webp" type="image/webp">
+            <img src="images/imageoffamily.png" alt="Urbana Fashion family lifestyle" width="1400" height="500" class="hero-img" fetchpriority="high">
+        </picture>
+    </div>
+
+    <br><br><br><br>
+<h1 class="categories">CATEGORIES</h1>
+    <div class="categories-wrapper">
+        <div class="categories-grid">
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=girls" aria-label="Shop Girls Dresses">
+                        <img src="images/img1.png" width="210" alt="Girls Dresses">
+                    </a>
+                    <span class="categoriesname">GIRLS DRESSES</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=men&category=topwear" aria-label="Shop Men's Casuals">
+                        <img src="images/img2.png" width="210" alt="Men's Casuals">
+                    </a>
+                    <span class="categoriesname">MEN'S CASUALS</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=men&category=topwear&type=formalshirts" aria-label="Shop Men's Formals">
+                        <img src="images/img3.png" width="210" alt="Men's Formals">
+                    </a>
+                    <span class="categoriesname">MEN'S FORMALS</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=boys&category=topwear&type=tshirts" aria-label="Shop Boys T-Shirts">
+                        <img src="images/img4.png" width="210" alt="Boys T-Shirts">
+                    </a>
+                    <span class="categoriesname">BOYS T-SHIRTS</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=women&category=indianwear" aria-label="Shop Women's Ethnic">
+                        <img src="images/img5.png" width="210" alt="Women's Ethnic">
+                    </a>
+                    <span class="categoriesname">WOMEN'S ETHNIC</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item">
+                    <a href="category.html?section=women&category=topwear" aria-label="Shop Women's Western">
+                        <img src="images/img6.png" width="210" alt="Women's Western">
+                    </a>
+                    <span class="categoriesname">WOMEN'S WESTERN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<br><br>
+    <hr class="section-divider">
+<br><br>
+    <h2 class="categories">BUDGET BUYS</h2>
+    <div class="categories-wrapper">
+        <div class="budget-grid">
+            <div class="category-item">
+                <div class="item1">
+                    <a href="category.html?maxprice=299">
+                        <img src="images/under299.png" width="450" alt="Shop Under ₹299">
+                    </a>
+                    <span class="categoriesnamebudget">UNDER ₹299</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item1">
+                    <a href="category.html?maxprice=499">
+                        <img src="images/under499.png" width="450" alt="Shop Under ₹499">
+                    </a>
+                    <span class="categoriesnamebudget">UNDER ₹499</span>
+                </div>
+            </div>
+            <div class="category-item">
+                <div class="item1">
+                    <a href="category.html?maxprice=799">
+                        <img src="images/under799.png" width="450" alt="Shop Under ₹799">
+                    </a>
+                    <span class="categoriesnamebudget">UNDER ₹799</span>
+                </div>
+            </div>
+        </div>
+    </div>
+<br><br>
+    <hr class="section-divider">
+<br><br>
+    <!-- ══ SPECIAL OFFERS ══ -->
+    <section class="offers-section" aria-label="Special offers">
+
+        <div class="offers-header">
+            <div>
+                <div class="offers-label">Limited Time</div>
+                <div class="offers-title">Special Offers</div>
+            </div>
+            <div class="offers-countdown-wrap">
+                <div class="offers-countdown-label">Deals end in</div>
+                <div class="countdown">
+                    <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-unit">hrs</span></div>
+                    <span class="cd-sep">:</span>
+                    <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-unit">min</span></div>
+                    <span class="cd-sep">:</span>
+                    <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-unit">sec</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="offers-grid">
+
+            <!-- HERO CARD: Up to 50% off Women -->
+            <a href="category.html?section=women" class="offer-card hero dark" aria-label="Women up to 50% off">
+                <div class="offer-deco" style="width:280px;height:280px;background:rgba(255,204,0,0.07);top:-60px;right:-80px;"></div>
+                <div class="offer-deco" style="width:160px;height:160px;background:rgba(255,204,0,0.05);bottom:40px;left:-40px;"></div>
+                <span class="offer-tag light">Women's Edit</span>
+                <div class="offer-inner">
+                    <div class="offer-discount light">50<span style="font-size:32px;vertical-align:super;letter-spacing:0;">%</span></div>
+                    <div class="offer-sub light">OFF on all women's wear</div>
+                    <span class="offer-cta light">Shop Now &rarr;</span>
+                </div>
+            </a>
+
+            <!-- CARD 2: Men -->
+            <a href="category.html?section=men" class="offer-card tall warm" aria-label="Men's new arrivals">
+                <div class="offer-deco" style="width:180px;height:180px;background:rgba(244,160,0,0.12);bottom:-50px;right:-50px;border-radius:50%;"></div>
+                <span class="offer-tag dark">Men's Pick</span>
+                <div class="offer-inner">
+                    <div class="offer-discount dark">30<span style="font-size:22px;vertical-align:super;">%</span></div>
+                    <div class="offer-sub dark">Off casuals &amp; formals</div>
+                    <span class="offer-cta dark">Explore &rarr;</span>
+                </div>
+            </a>
+
+            <!-- CARD 3: Kids -->
+            <a href="category.html?section=boys" class="offer-card tall yellow" aria-label="Kids flash sale">
+                <div class="offer-deco" style="width:120px;height:120px;background:rgba(0,0,0,0.06);top:-30px;right:-30px;border-radius:50%;"></div>
+                <span class="offer-tag dark">Kids Flash</span>
+                <div class="offer-inner">
+                    <div class="offer-discount dark">40<span style="font-size:22px;vertical-align:super;">%</span></div>
+                    <div class="offer-sub dark">Boys &amp; girls styles</div>
+                    <span class="offer-cta dark">Shop Kids &rarr;</span>
+                </div>
+            </a>
+
+            <!-- CARD 4: Wide banner -->
+            <a href="category.html" class="offer-card wide gold" aria-label="Free shipping on orders above ₹999">
+                <div class="offer-deco" style="width:240px;height:240px;background:rgba(255,204,0,0.06);top:-80px;right:60px;border-radius:50%;"></div>
+                <div class="offer-wide-inner">
+                    <div class="offer-wide-text">
+                        <div class="offers-label" style="color:#ffcc00aa;margin-bottom:4px;">Today Only</div>
+                        <div class="offer-discount gold" style="font-size:36px;letter-spacing:-1px;line-height:1.1;">FREE DELIVERY</div>
+                        <div class="offer-sub muted" style="margin-bottom:0;">On all orders above ₹999 &nbsp;·&nbsp; Use code <strong style="color:#ffcc00;">URBANA10</strong> for extra 10% off</div>
+                    </div>
+                    <div class="offer-wide-right">
+                        <span class="offer-cta light">Shop All &rarr;</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+<br><br>
+    <hr class="section-divider">
+<br><br>
+    <h2 class="categories">TESTIMONIALS</h2>
+    <div class="testimonial-wrapper">
+        <div class="testimonial-slider">
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>
+                    I bought some dresses from URBANA. Latest styles, good quality,
+                    best prices. I'm definitely going to be a regular customer.
+                </p>
+                <p class="testimonial-author">– Meghna D</p>
+            </div>
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>
+                    Beautiful collection and very classy styles. The fabric quality
+                    is impressive and delivery was quick.
+                </p>
+                <p class="testimonial-author">– Riya S</p>
+            </div>
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p>
+                    Urbana always keeps me updated with trends. Affordable fashion
+                    without compromising elegance.
+                </p>
+                <p class="testimonial-author">– Ananya K</p>
+            </div>
+        </div>
+        <div class="testimonial-dots">
+            <span class="dot active" onclick="slideReview(0)"></span>
+            <span class="dot" onclick="slideReview(1)"></span>
+            <span class="dot" onclick="slideReview(2)"></span>
+        </div>
+    </div>
+
+    <br><br>
+</main>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    loadLayout();
+});
+
+// ── COUNTDOWN TIMER ──
+(function(){
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tick(){
+        const now = new Date();
+        const end = new Date(); end.setHours(23,59,59,999);
+        const diff = Math.max(0, end - now);
+        const hEl = document.getElementById('cd-h');
+        const mEl = document.getElementById('cd-m');
+        const sEl = document.getElementById('cd-s');
+        if(hEl) hEl.textContent = pad(Math.floor(diff / 3600000));
+        if(mEl) mEl.textContent = pad(Math.floor((diff % 3600000) / 60000));
+        if(sEl) sEl.textContent = pad(Math.floor((diff % 60000) / 1000));
+    }
+    tick(); setInterval(tick, 1000);
+})();
+
+function slideReview(i) {
+    const slider = document.querySelector(".testimonial-slider");
+    const dots = document.querySelectorAll(".dot");
+    slider.style.transform = `translateX(-${i * 100}%)`;
+    dots.forEach(d => d.classList.remove("active"));
+    dots[i].classList.add("active");
+}
+</script>
+
+</body>
+</html>

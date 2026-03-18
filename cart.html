@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Your Urbana shopping cart. Review your items and proceed to checkout.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Your Cart - Urbana Fashion</title>
+
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="cart-page">
+
+    <!-- HEADING -->
+    <h1 class="heading" id="cart-heading" style="display:none; text-align:center;">Shopping Bag <span id="cart-count">0</span> items</h1>
+
+    <!-- CART GRID -->
+    <div class="cart-grid" id="cart-grid" style="display:none;">
+
+        <!-- LEFT: ITEMS -->
+        <div>
+            <!-- Free shipping progress bar -->
+            <div class="free-shipping-bar" id="shipping-bar" style="display:none;">
+                <i data-lucide="truck" style="width:16px;height:16px;flex-shrink:0;"></i>
+                <span id="shipping-bar-text"></span>
+                <div class="free-shipping-progress">
+                    <div class="free-shipping-fill" id="shipping-fill"></div>
+                </div>
+            </div>
+
+            <div id="cart-items" class="cart-items"></div>
+        </div>
+
+        <!-- RIGHT: SUMMARY -->
+        <div class="summary">
+            <h3 class="summary-title">ORDER SUMMARY</h3>
+
+            <div class="summary-row">
+                <span>Subtotal (<span id="item-count-summary">0</span> items)</span>
+                <span id="subtotal">₹0</span>
+            </div>
+
+            <div class="summary-row savings" id="savings-row" style="display:none;">
+                <span>You Save</span>
+                <span id="savings-amount">₹0</span>
+            </div>
+
+            <div class="summary-row" id="discount-row" style="display:none;">
+                <span>Coupon Discount</span>
+                <span id="discount-amount" style="color:#27ae60;font-weight:700;">-₹0</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span id="shipping-cost">₹49</span>
+            </div>
+
+            <hr class="summary-divider">
+
+            <div class="total-row">
+                <span>Total</span>
+                <span id="total">₹0</span>
+            </div>
+
+            <!-- COUPON -->
+            <div class="coupon-section">
+                <span class="coupon-label">APPLY COUPON</span>
+                <div class="coupon-row">
+                    <input type="text" id="coupon-input" placeholder="Enter code">
+                    <button onclick="applyCoupon()">APPLY</button>
+                </div>
+                <div class="coupon-msg" id="coupon-msg"></div>
+            </div>
+
+            <button class="checkout-btn" onclick="proceedCheckout()">
+                PROCEED TO CHECKOUT
+            </button>
+
+            <div class="secure-note">
+                <i data-lucide="lock" style="width:12px;height:12px;"></i>
+                SECURE CHECKOUT
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EMPTY CART -->
+    <div id="empty-cart" class="empty-cart" style="display:none;">
+        <img src="images/emptycart.png" alt="Empty Cart">
+        <div class="empty-text">Your bag is empty</div>
+        <div class="empty-subtext">Looks like you haven't added anything yet.</div>
+        <a href="index.html" class="empty-btn">START SHOPPING</a>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    // loadLayout is defined in common.js — safe to call if available
+    if(typeof loadLayout === "function"){
+        loadLayout();
+    }
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 300);
+});
+</script>
+
+<script>
+// ── VALID COUPONS ──
+const COUPONS = {
+    "URBANA10": 10,
+    "SAVE20":   20,
+    "FIRST15":  15,
+};
+
+let cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
+let appliedDiscount = 0;
+let appliedCoupon   = "";
+
+function saveCart(){
+    localStorage.setItem("urbana-cart", JSON.stringify(cart));
+}
+
+function getSubtotal(){
+    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+}
+
+// How much the user saves vs MRP (only if product has discount field)
+function getTotalSavings(){
+    return cart.reduce((sum, item) => {
+        if(item.product.discount){
+            const mrp = item.product.price;
+            const discounted = Math.round(mrp - (mrp * item.product.discount / 100));
+            return sum + (mrp - discounted) * item.quantity;
+        }
+        return sum;
+    }, 0);
+}
+
+function removeFromCart(idx){
+    cart.splice(idx, 1);
+    saveCart();
+    renderCart();
+    if(typeof updateBadges === "function") updateBadges();
+}
+
+function updateQuantity(idx, delta){
+    cart[idx].quantity += delta;
+    if(cart[idx].quantity <= 0){
+        removeFromCart(idx);
+        return;
+    }
+    saveCart();
+    renderCart();
+    if(typeof updateBadges === "function") updateBadges();
+}
+
+function applyCoupon(){
+    const code = document.getElementById("coupon-input").value.trim().toUpperCase();
+    const msg  = document.getElementById("coupon-msg");
+
+    if(!code){
+        msg.className = "coupon-msg error";
+        msg.textContent = "Please enter a coupon code.";
+        return;
+    }
+
+    if(COUPONS[code]){
+        appliedDiscount = COUPONS[code];
+        appliedCoupon   = code;
+        msg.className   = "coupon-msg success";
+        msg.textContent = `✓ "${code}" applied! ${appliedDiscount}% off.`;
+        renderSummary();
+    } else {
+        appliedDiscount = 0;
+        appliedCoupon   = "";
+        msg.className   = "coupon-msg error";
+        msg.textContent = "Invalid coupon code.";
+        renderSummary();
+    }
+}
+
+function renderSummary(){
+    const subtotal  = getSubtotal();
+    const savings   = getTotalSavings();
+    const couponOff = Math.round(subtotal * appliedDiscount / 100);
+    const shipping  = (subtotal - couponOff) >= 999 ? 0 : 49;
+    const total     = subtotal - couponOff + shipping;
+
+    const totalQty = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    document.getElementById("item-count-summary").textContent = totalQty;
+    document.getElementById("subtotal").textContent = "₹" + subtotal;
+
+    // Savings row
+    if(savings > 0){
+        document.getElementById("savings-row").style.display = "flex";
+        document.getElementById("savings-amount").textContent = "₹" + savings;
+    } else {
+        document.getElementById("savings-row").style.display = "none";
+    }
+
+    // Coupon discount row
+    if(appliedDiscount > 0){
+        document.getElementById("discount-row").style.display = "flex";
+        document.getElementById("discount-amount").textContent = "-₹" + couponOff;
+    } else {
+        document.getElementById("discount-row").style.display = "none";
+    }
+
+    document.getElementById("shipping-cost").textContent = shipping === 0 ? "FREE 🎉" : "₹" + shipping;
+    document.getElementById("total").textContent = "₹" + total;
+
+    // Free shipping progress bar
+    const FREE_THRESHOLD = 999;
+    const bar  = document.getElementById("shipping-bar");
+    const fill = document.getElementById("shipping-fill");
+    const barText = document.getElementById("shipping-bar-text");
+
+    if(shipping > 0){
+        bar.style.display = "flex";
+        const remaining = FREE_THRESHOLD - (subtotal - couponOff);
+        const pct = Math.min(((subtotal - couponOff) / FREE_THRESHOLD) * 100, 100);
+        fill.style.width = pct + "%";
+        barText.textContent = `Add ₹${remaining} more for FREE delivery`;
+    } else {
+        bar.style.display = "flex";
+        fill.style.width = "100%";
+        barText.textContent = "You've got FREE delivery! 🎉";
+    }
+}
+
+function renderCart(){
+    const heading = document.getElementById("cart-heading");
+    const grid    = document.getElementById("cart-grid");
+    const empty   = document.getElementById("empty-cart");
+    const count   = document.getElementById("cart-count");
+
+    const totalQty = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+    if(cart.length === 0){
+        heading.style.display = "none";
+        grid.style.display    = "none";
+        empty.style.display   = "flex";
+        if(typeof updateBadges === "function") updateBadges();
+        return;
+    }
+
+    heading.style.display = "block";
+    grid.style.display    = "grid";
+    empty.style.display   = "none";
+
+    // Update heading item count
+    heading.innerHTML = `Shopping Bag <span style="color:#999;font-weight:500;font-size:20px;">(${totalQty} items)</span>`;
+
+    document.getElementById("cart-items").innerHTML = cart.map((item, idx) => {
+
+        const price    = item.product.price;
+        const disc     = item.product.discount || 0;
+        const newPrice = disc ? Math.round(price - (price * disc / 100)) : price;
+        const lineTotal = newPrice * item.quantity;
+        const origLine  = price * item.quantity;
+
+        return `
+        <div class="cart-item" id="cart-item-${idx}">
+            <img src="${item.product.image}" alt="${item.product.name}">
+
+            <div class="item-body">
+                <div class="item-top">
+                    <div>
+                        <div class="item-name">${item.product.name}</div>
+                        <div class="item-size">Size: ${item.size}</div>
+                    </div>
+                    <div class="item-price-col">
+                        <div class="item-price">₹${lineTotal}</div>
+                        ${disc ? `<span class="item-original">₹${origLine}</span>
+                        <span class="item-savings">${disc}% off</span>` : ""}
+                    </div>
+                </div>
+
+                <div class="item-bottom">
+                    <div class="qty-box">
+                        <button onclick="updateQuantity(${idx}, -1)">−</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity(${idx}, 1)">+</button>
+                    </div>
+
+                    <div class="item-actions">
+                        <button class="wishlist-btn" onclick="moveToWishlist(${idx})">
+                            <i data-lucide="heart" style="width:13px;height:13px;"></i>
+                            Wishlist
+                        </button>
+                        <button class="remove-btn" onclick="removeFromCart(${idx})">
+                            <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }).join("");
+
+    // Re-init lucide icons for dynamically added HTML
+    if(window.lucide) lucide.createIcons();
+
+    renderSummary();
+}
+
+function moveToWishlist(idx){
+    let wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
+    const item = cart[idx];
+    const alreadyIn = wishlist.some(w => w.id === item.product.id);
+    if(!alreadyIn) {
+        wishlist.push(item.product);
+        localStorage.setItem("urbana-wishlist", JSON.stringify(wishlist));
+    }
+    cart.splice(idx, 1);
+    saveCart();
+    renderCart();
+    if(typeof updateBadges === "function") updateBadges();
+}
+
+function proceedCheckout(){
+    if(cart.length === 0) return;
+    window.location.href = "checkout.html";
+}
+
+// Initial render
+renderCart();
+// Sync header badges on page load (in case cart was modified elsewhere)
+document.addEventListener("DOMContentLoaded", () => {
+    if(typeof updateBadges === "function") updateBadges();
+});
+</script>
+
+</body>
+</html>

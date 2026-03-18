@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Search Urbana Fashion for the latest styles in men, women, and kids clothing.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Search - Urbana Fashion</title>
+
+<link rel="stylesheet" href="urbana.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="search-page">
+
+    <!-- SEARCH BAR -->
+    <div class="search-bar-wrapper">
+        <i data-lucide="search"></i>
+        <input
+            type="text"
+            class="search-input"
+            id="search-input"
+            placeholder="Search for products, categories..."
+            autocomplete="off"
+            oninput="handleSearch()"
+        >
+        <button class="clear-btn" id="clear-btn" onclick="clearSearch()">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </button>
+    </div>
+
+    <!-- RESULT COUNT -->
+    <div class="result-info" id="result-info"></div>
+
+    <!-- POPULAR SEARCHES (shown when empty) -->
+    <div class="popular-section" id="popular-section">
+        <div class="popular-title">POPULAR SEARCHES</div>
+        <div class="popular-tags">
+            <button class="tag" onclick="setSearch('T-Shirt')">T-Shirt</button>
+            <button class="tag" onclick="setSearch('Jeans')">Jeans</button>
+            <button class="tag" onclick="setSearch('Dress')">Dress</button>
+            <button class="tag" onclick="setSearch('Kurta')">Kurta</button>
+            <button class="tag" onclick="setSearch('Shorts')">Shorts</button>
+            <button class="tag" onclick="setSearch('Top')">Top</button>
+            <button class="tag" onclick="setSearch('Leggings')">Leggings</button>
+            <button class="tag" onclick="setSearch('Frock')">Frock</button>
+            <button class="tag" onclick="setSearch('Jumpsuit')">Jumpsuit</button>
+            <button class="tag" onclick="setSearch('Ethnic')">Ethnic</button>
+            <button class="tag" onclick="setSearch('Girls')">Girls</button>
+            <button class="tag" onclick="setSearch('Boys')">Boys</button>
+            <button class="tag" onclick="setSearch('Women')">Women</button>
+            <button class="tag" onclick="setSearch('Men')">Men</button>
+        </div>
+    </div>
+
+    <!-- RESULTS GRID -->
+    <div class="products-grid" id="products-grid"></div>
+
+    <!-- NO RESULTS -->
+    <div class="no-results" id="no-results">
+        <i data-lucide="search-x"></i>
+        <h3>No results found</h3>
+        <p>Try searching with different keywords</p>
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+<script src="common.js"></script>
+<script src="category.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    if(typeof loadLayout === "function") loadLayout();
+
+    // Check if there's a query in the URL
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if(q){
+        document.getElementById("search-input").value = q;
+        handleSearch();
+    }
+
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 300);
+});
+
+function buildProductURL(p, idx){
+    const params = new URLSearchParams({
+        id:       idx,
+        name:     p.name,
+        image:    p.image,
+        price:    p.price,
+        discount: p.discount || 0,
+        rating:   p.rating   || 4.5,
+        section:  p.section  || "",
+        category: p.category || "",
+        type:     p.type     || "",
+        colour:   p.colour   || "",
+    });
+    return `product.html?${params.toString()}`;
+}
+
+function highlightText(text, query){
+    if(!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+}
+
+function handleSearch(){
+    const query = document.getElementById("search-input").value.trim();
+    const clearBtn      = document.getElementById("clear-btn");
+    const popularSection = document.getElementById("popular-section");
+    const grid          = document.getElementById("products-grid");
+    const noResults     = document.getElementById("no-results");
+    const resultInfo    = document.getElementById("result-info");
+
+    // Show/hide clear button
+    clearBtn.classList.toggle("visible", query.length > 0);
+
+    // Update URL param
+    const url = new URL(window.location);
+    if(query) url.searchParams.set("q", query);
+    else url.searchParams.delete("q");
+    window.history.replaceState({}, "", url);
+
+    if(!query){
+        popularSection.style.display = "block";
+        grid.innerHTML = "";
+        noResults.style.display = "none";
+        resultInfo.innerHTML = "";
+        return;
+    }
+
+    popularSection.style.display = "none";
+
+    // Search through allProducts (from category.js)
+    const q = query.toLowerCase();
+    const results = allProducts.filter(p =>
+        p.name.toLowerCase().includes(q)     ||
+        p.section.toLowerCase().includes(q)  ||
+        (p.category && p.category.toLowerCase().includes(q)) ||
+        (p.type && p.type.toLowerCase().includes(q))         ||
+        (p.colour && p.colour.toLowerCase().includes(q))
+    );
+
+    if(results.length === 0){
+        grid.innerHTML = "";
+        noResults.style.display = "block";
+        resultInfo.innerHTML = `Showing <span>0</span> results for "<span>${query}</span>"`;
+        setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 100);
+        return;
+    }
+
+    noResults.style.display = "none";
+    resultInfo.innerHTML = `Showing <span>${results.length}</span> result${results.length > 1 ? "s" : ""} for "<span>${query}</span>"`;
+
+    grid.innerHTML = results.map((p, idx) => {
+        const disc     = p.discount || 0;
+        const newPrice = disc ? Math.round(p.price - (p.price * disc / 100)) : p.price;
+        const rating   = p.rating || 4;
+        const url      = buildProductURL(p, allProducts.indexOf(p));
+
+        return `
+        <a href="${url}" class="product-card">
+
+            <div class="card-image">
+                <img src="${p.image}" alt="${p.name}">
+                ${disc ? `<span class="discount-badge">-${disc}%</span>` : ""}
+                <span class="section-badge">${p.section}</span>
+            </div>
+
+            <div class="card-info">
+                <div class="card-name">${highlightText(p.name, query)}</div>
+
+                <div class="card-prices">
+                    <span class="card-price">₹${newPrice}</span>
+                    ${disc ? `<span class="card-original">₹${p.price}</span>
+                    <span class="card-save">${disc}% off</span>` : ""}
+                </div>
+
+                <div class="card-rating">
+                    ${"★".repeat(Math.floor(rating))}${"☆".repeat(5 - Math.floor(rating))}
+                </div>
+            </div>
+
+        </a>
+        `;
+    }).join("");
+
+    setTimeout(() => { if(window.lucide) lucide.createIcons(); }, 100);
+}
+
+function clearSearch(){
+    document.getElementById("search-input").value = "";
+    handleSearch();
+    document.getElementById("search-input").focus();
+}
+
+function setSearch(term){
+    document.getElementById("search-input").value = term;
+    handleSearch();
+    document.getElementById("search-input").focus();
+}
+</script>
+
+</body>
+</html>

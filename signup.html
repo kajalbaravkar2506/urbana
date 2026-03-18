@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Create your Urbana Fashion account and start shopping.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Urbana Fashion</title>
+    <link rel="stylesheet" href="urbana.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div id="header"></div>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-title">Create account</div>
+        <div class="auth-sub">Join Urbana and start shopping</div>
+
+        <div class="name-row">
+            <div class="input-group">
+                <label>First Name</label>
+                <input type="text" id="fname" placeholder="First name">
+            </div>
+            <div class="input-group">
+                <label>Last Name</label>
+                <input type="text" id="lname" placeholder="Last name">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="you@example.com">
+        </div>
+        <div class="input-group">
+            <label>Mobile Number</label>
+            <input type="text" id="mobile" placeholder="10-digit mobile number"
+                oninput="this.value=this.value.replace(/[^0-9]/g,'')" maxlength="10">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Min. 6 characters">
+        </div>
+
+        <button class="btn-primary" onclick="createAccount()">CREATE ACCOUNT</button>
+        <div class="terms-note">By creating an account you agree to our <a href="termsofservice.html">Terms of Service</a> &amp; <a href="privacypolicy.html">Privacy Policy</a></div>
+
+        <div class="auth-footer">Already have an account? <a href="login.html">Login</a></div>
+    </div>
+</div>
+<div id="footer"></div>
+<script src="common.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => { loadLayout(); });
+function createAccount() {
+    const fname = document.getElementById("fname").value.trim();
+    const lname = document.getElementById("lname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!fname || !lname) { alert("Please enter your full name"); return; }
+    if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/i.test(email)) { alert("Please enter a valid email address"); return; }
+    if (mobile.length !== 10) { alert("Please enter a valid 10-digit mobile number"); return; }
+    if (password.length < 6) { alert("Password must be at least 6 characters"); return; }
+    window.location.href = "login.html";
+}
+</script>
+</body>
+</html>
