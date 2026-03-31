@@ -19,7 +19,7 @@ let allProducts = [
     {section:"women", category:"topwear",    type:"tshirts",    name:"Women T-Shirt",      image:"images/womentshirts.png",            price:699,  discount:20, colour:"pink",   rating:4.0},
     {section:"women", category:"topwear",    type:"tops",       name:"Women Top",          image:"images/womentops.png",            price:799,  discount:15, colour:"white",  rating:3.9},
     {section:"women", category:"dresses",    type:"dresses",    name:"Women Dress",        image:"images/womendresses.png",            price:999,  discount:25, colour:"pink",   rating:4.3},
-    {section:"women", category:"dresses",    type:"coordsets",  name:"Women Co-Ord Set",   image:"images/womencoordsets.png",            price:1299, discount:30, colour:"blue",   rating:4.5},
+    {section:"women", category:"dresses",    type:"coordsets",  name:"Women Co-Ord Set",   image:"images/womencoordsets.png",            price:1299, discount:50, colour:"blue",   rating:4.5},
     {section:"women", category:"bottomwear", type:"denim",      name:"Women Denim",        image:"images/womendenim.png",            price:1199, discount:20, colour:"blue",   rating:4.2},
     {section:"women", category:"bottomwear", type:"pants",      name:"Women Pants",        image:"images/womenpants.png",            price:899,  discount:10, colour:"black",  rating:4.0},
     {section:"women", category:"indianwear", type:"kurtas",     name:"Women Kurta",        image:"images/womenkurtas.png",            price:899,  discount:40, colour:"pink",   rating:4.6},
@@ -84,14 +84,25 @@ function renderProducts(section){
     const selectedCategory = params.get("category");
     const selectedType     = params.get("type");
     const maxPrice         = params.get("maxprice") ? parseInt(params.get("maxprice")) : null;
+    const minDiscount      = params.get("mindiscount") ? parseInt(params.get("mindiscount")) : null;
+    // Read sections fresh from URL — supports "sections=boys,girls" for multi-section offers
+    const urlSection       = params.get("section");
+    const urlSections      = params.get("sections") ? params.get("sections").split(",") : null;
 
     const selectedColours   = [...document.querySelectorAll(".colour:checked")].map(c => c.value);
     const selectedPrices    = [...document.querySelectorAll(".price:checked")].map(p => p.value);
     const selectedDiscounts = [...document.querySelectorAll(".discount:checked")].map(d => parseInt(d.value));
 
-    let filtered = section
-        ? allProducts.map((p,i) => ({...p, _idx:i})).filter(p => p.section === section)
-        : allProducts.map((p,i) => ({...p, _idx:i}));
+    let filtered = allProducts.map((p,i) => ({...p, _idx:i}));
+
+    // Apply section filter — multi-section (boys,girls) takes priority over single
+    if(urlSections){
+        filtered = filtered.filter(p => urlSections.includes(p.section));
+    } else if(urlSection){
+        filtered = filtered.filter(p => p.section === urlSection);
+    } else if(section){
+        filtered = filtered.filter(p => p.section === section);
+    }
 
     if(selectedCategory) filtered = filtered.filter(p => p.category === selectedCategory);
     if(selectedType)     filtered = filtered.filter(p => p.type === selectedType);
@@ -99,6 +110,11 @@ function renderProducts(section){
         const finalPrice = Math.round(p.price - (p.price * (p.discount || 0) / 100));
         return finalPrice <= maxPrice;
     });
+
+    // Minimum discount filter — used by Special Offers on homepage
+    if(minDiscount !== null){
+        filtered = filtered.filter(p => (p.discount || 0) >= minDiscount);
+    }
 
     if(selectedColours.length)   filtered = filtered.filter(p => selectedColours.includes(p.colour));
 

@@ -96,7 +96,7 @@
         <img src="images/emptycart.png" alt="Empty Cart">
         <div class="empty-text">Your bag is empty</div>
         <div class="empty-subtext">Looks like you haven't added anything yet.</div>
-        <a href="index.html" class="empty-btn">START SHOPPING</a>
+        <a href="category.html" class="empty-btn">START SHOPPING</a>
     </div>
 
 </div>
@@ -295,9 +295,8 @@ function renderCart(){
                     </div>
 
                     <div class="item-actions">
-                        <button class="wishlist-btn" onclick="moveToWishlist(${idx})">
-                            <i data-lucide="heart" style="width:13px;height:13px;"></i>
-                            Wishlist
+                        <button class="wishlist-btn" onclick="moveToWishlist(${idx})" title="Move to Wishlist" style="width:34px;height:34px;border:1.5px solid #ddd;border-radius:6px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;transition:all 0.2s;color:#bbb;" onmouseenter="this.style.borderColor='#e74c3c';this.style.background='#fff5f5';" onmouseleave="this.style.borderColor='#ddd';this.style.background='none';">
+                            <i data-lucide="heart" style="width:16px;height:16px;stroke:#bbb;"></i>
                         </button>
                         <button class="remove-btn" onclick="removeFromCart(${idx})">
                             <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
@@ -321,7 +320,14 @@ function moveToWishlist(idx){
     const item = cart[idx];
     const alreadyIn = wishlist.some(w => w.id === item.product.id);
     if(!alreadyIn) {
-        wishlist.push(item.product);
+        const wishlistProduct = Object.assign({}, item.product, {
+            section:  item.product.section  || "",
+            category: item.product.category || "",
+            type:     item.product.type     || "",
+            colour:   item.product.colour   || "",
+            rating:   item.product.rating   || 4.5,
+        });
+        wishlist.push(wishlistProduct);
         localStorage.setItem("urbana-wishlist", JSON.stringify(wishlist));
     }
     cart.splice(idx, 1);

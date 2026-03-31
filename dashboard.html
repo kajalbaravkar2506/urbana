@@ -108,25 +108,53 @@
             <div class="dash-panel" id="tab-addresses">
                 <div class="dash-block">
                     <div class="block-header"><div class="block-title">Saved Addresses</div></div>
-                    <div class="addr-grid">
-                        <div class="addr-card default-addr">
-                            <span class="addr-tag tag-home">🏠 Home</span>
-                            <div class="addr-name">Rahul Sharma</div>
-                            <div class="addr-text">14, Green Valley Apartments,Andheri West, Mumbai – 400058,Maharashtra</div>
-                            <div class="addr-phone">+91 98765 43210</div>
-                            <div class="addr-actions"><button class="addr-btn">Edit</button><button class="addr-btn del">Remove</button></div>
+
+                    <!-- ADD / EDIT FORM (hidden by default) -->
+                    <div id="addr-form-wrap" style="display:none;padding:20px 24px;border-bottom:1px solid #f0f0f0;">
+                        <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:16px;" id="addr-form-title">Add New Address</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div>
+                                <input id="af-name"  type="text"   placeholder="Full Name *"           style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;">
+                            </div>
+                            <div>
+                                <input id="af-phone" type="text"   placeholder="Phone *" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;">
+                            </div>
+                            <div style="grid-column:1/-1;">
+                                <input id="af-addr"  type="text"   placeholder="Street Address *"       style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;">
+                            </div>
+                            <div>
+                                <input id="af-city"  type="text"   placeholder="City *"                 style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;">
+                            </div>
+                            <div>
+                                <input id="af-pin"   type="text"   placeholder="PIN Code *" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;">
+                            </div>
+                            <div>
+                                <select id="af-state" style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;background:white;">
+                                    <option value="">State *</option>
+                                    <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+                                    <option>Delhi</option><option>Goa</option><option>Gujarat</option>
+                                    <option>Haryana</option><option>Karnataka</option><option>Kerala</option>
+                                    <option>Madhya Pradesh</option><option>Maharashtra</option><option>Punjab</option>
+                                    <option>Rajasthan</option><option>Tamil Nadu</option><option>Telangana</option>
+                                    <option>Uttar Pradesh</option><option>West Bengal</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select id="af-type" style="width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;background:white;">
+                                    <option value="home">🏠 Home</option>
+                                    <option value="work">🏢 Work</option>
+                                    <option value="other">📦 Other</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="addr-card">
-                            <span class="addr-tag tag-work">🏢 Work</span>
-                            <div class="addr-name">Rahul Sharma</div>
-                            <div class="addr-text">Suite 402, Prestige Business Tower,MG Road, Bengaluru – 560001,Karnataka</div>
-                            <div class="addr-phone">+91 98765 43210</div>
-                            <div class="addr-actions"><button class="addr-btn">Edit</button><button class="addr-btn del">Remove</button></div>
+                        <div id="addr-form-err" style="color:#e74c3c;font-size:11px;font-weight:600;margin-top:8px;min-height:14px;"></div>
+                        <div style="display:flex;gap:10px;margin-top:16px;">
+                            <button onclick="saveAddress()" style="padding:11px 28px;background:#111;color:white;border:none;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#f4a000'" onmouseout="this.style.background='#111'">SAVE ADDRESS</button>
+                            <button onclick="closeAddrForm()" style="padding:11px 20px;background:none;color:#888;border:1.5px solid #ddd;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">CANCEL</button>
                         </div>
-                        <button class="addr-add" onclick="alert('Add address coming soon!')">
-                            <i data-lucide="plus-circle"></i><span>Add New Address</span>
-                        </button>
                     </div>
+
+                    <div class="addr-grid" id="addr-grid-wrap"></div>
                 </div>
             </div>
 
@@ -166,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderOrders(orders, "orders-list-wrap", 999);
     renderWishlist(wishlist, "wishlist-preview", 4);
     renderWishlist(wishlist, "wishlist-full-wrap", 999);
+    renderAddresses();
 
     // Re-render if user navigates back to this page (e.g. after placing order)
     window.addEventListener("focus", () => {
@@ -264,6 +293,132 @@ function saveProfile() {
     const ok = document.getElementById("save-ok");
     ok.style.display = "block";
     setTimeout(() => ok.style.display = "none", 3000);
+}
+
+// ── ADDRESS MANAGEMENT ──
+let editingAddrIdx = -1;
+
+function getAddresses() {
+    return JSON.parse(localStorage.getItem("urbana-addresses")) || [];
+}
+function saveAddresses(arr) {
+    localStorage.setItem("urbana-addresses", JSON.stringify(arr));
+}
+
+const ADDR_TAG = { home: { label: "🏠 Home", cls: "tag-home" }, work: { label: "🏢 Work", cls: "tag-work" }, other: { label: "📦 Other", cls: "tag-work" } };
+
+function renderAddresses() {
+    const addresses = getAddresses();
+    const grid = document.getElementById("addr-grid-wrap");
+    if (!grid) return;
+
+    let html = addresses.map((a, i) => {
+        const tag = ADDR_TAG[a.type] || ADDR_TAG.home;
+        return `<div class="addr-card ${i === 0 ? 'default-addr' : ''}">
+            <span class="addr-tag ${tag.cls}">${tag.label}</span>
+            <div class="addr-name">${a.name}</div>
+            <div class="addr-text">${a.addr}, ${a.city} – ${a.pin}, ${a.state}</div>
+            <div class="addr-phone">${a.phone}</div>
+            <div class="addr-actions">
+                <button class="addr-btn" onclick="editAddress(${i})">Edit</button>
+                <button class="addr-btn del" onclick="removeAddress(${i})">Remove</button>
+            </div>
+        </div>`;
+    }).join("");
+
+    html += `<button class="addr-add" onclick="openAddrForm()">
+        <i data-lucide="plus-circle"></i><span>Add New Address</span>
+    </button>`;
+
+    grid.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+}
+
+function openAddrForm(idx = -1) {
+    editingAddrIdx = idx;
+    const form = document.getElementById("addr-form-wrap");
+    const title = document.getElementById("addr-form-title");
+    form.style.display = "block";
+
+    if (idx >= 0) {
+        const a = getAddresses()[idx];
+        title.textContent = "Edit Address";
+        document.getElementById("af-name").value  = a.name;
+        document.getElementById("af-phone").value = a.phone;
+        document.getElementById("af-addr").value  = a.addr;
+        document.getElementById("af-city").value  = a.city;
+        document.getElementById("af-pin").value   = a.pin;
+        document.getElementById("af-state").value = a.state;
+        document.getElementById("af-type").value  = a.type;
+    } else {
+        title.textContent = "Add New Address";
+        ["af-name","af-phone","af-addr","af-city","af-pin"].forEach(id => document.getElementById(id).value = "");
+        document.getElementById("af-state").value = "";
+        document.getElementById("af-type").value  = "home";
+    }
+    document.getElementById("addr-form-err").textContent = "";
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeAddrForm() {
+    document.getElementById("addr-form-wrap").style.display = "none";
+    editingAddrIdx = -1;
+}
+
+function setAddrFieldError(id, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.borderColor = "#e74c3c";
+    el.style.background  = "#fff8f8";
+    document.getElementById("addr-form-err").textContent = msg;
+}
+
+function saveAddress() {
+    const name  = document.getElementById("af-name").value.trim();
+    const phone = document.getElementById("af-phone").value.trim();
+    const addr  = document.getElementById("af-addr").value.trim();
+    const city  = document.getElementById("af-city").value.trim();
+    const pin   = document.getElementById("af-pin").value.trim();
+    const state = document.getElementById("af-state").value;
+    const type  = document.getElementById("af-type").value;
+
+    // Reset borders
+    ["af-name","af-phone","af-addr","af-city","af-pin","af-state"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.borderColor = ""; el.style.background = ""; }
+    });
+    document.getElementById("addr-form-err").textContent = "";
+
+    if (!name)           { setAddrFieldError("af-name",  "Enter full name"); return; }
+    if (phone.length !== 10) { setAddrFieldError("af-phone", "Enter a valid 10-digit phone number"); return; }
+    if (!addr)           { setAddrFieldError("af-addr",  "Enter street address"); return; }
+    if (!city)           { setAddrFieldError("af-city",  "Enter city"); return; }
+    if (pin.length !== 6){ setAddrFieldError("af-pin",   "Enter a valid 6-digit PIN code"); return; }
+    if (!state)          { setAddrFieldError("af-state", "Select a state"); return; }
+
+    const addresses = getAddresses();
+    const entry = { name, phone, addr, city, pin, state, type };
+
+    if (editingAddrIdx >= 0) {
+        addresses[editingAddrIdx] = entry;
+    } else {
+        addresses.push(entry);
+    }
+
+    saveAddresses(addresses);
+    closeAddrForm();
+    renderAddresses();
+}
+
+function editAddress(idx) {
+    openAddrForm(idx);
+}
+
+function removeAddress(idx) {
+    const addresses = getAddresses();
+    addresses.splice(idx, 1);
+    saveAddresses(addresses);
+    renderAddresses();
 }
 
 function logoutUser() {

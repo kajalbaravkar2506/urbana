@@ -78,14 +78,14 @@
             </div>
 
             <!-- STOCK -->
-            <div class="stock-status">
+            <div class="stock-status" id="stock-status">
                 <i data-lucide="check-circle" style="width:15px;height:15px;"></i>
                 In Stock
             </div>
 
             <!-- ACTIONS -->
             <div class="action-row">
-                <button class="add-to-cart-btn" onclick="addToCart()">
+                <button class="add-to-cart-btn" id="add-to-cart-btn" onclick="addToCart()">
                     <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i>
                     ADD TO CART
                 </button>
@@ -285,6 +285,20 @@ function loadProduct(){
     inWishlist = wishlist.some(w => w.id === product.id);
     if(inWishlist) document.getElementById("wishlist-btn").classList.add("active");
 
+    // Out of stock — every product whose id mod 5 === 3 is marked out of stock (~20%)
+    const stockEl  = document.getElementById("stock-status");
+    const cartBtn  = document.getElementById("add-to-cart-btn");
+    const idNum    = parseInt(product.id) || 0;
+    const outOfStock = (idNum % 5 === 3);
+    if(outOfStock){
+        stockEl.innerHTML = `<i data-lucide="x-circle" style="width:15px;height:15px;"></i> Out of Stock`;
+        stockEl.style.color = "#e74c3c";
+        cartBtn.disabled = true;
+        cartBtn.style.background = "#ccc";
+        cartBtn.style.cursor = "not-allowed";
+        cartBtn.innerHTML = `<i data-lucide="shopping-bag" style="width:16px;height:16px;"></i> OUT OF STOCK`;
+    }
+
     // Re-init icons after dynamic render, then render reviews
     setTimeout(() => {
         if(window.lucide) lucide.createIcons();
@@ -319,6 +333,11 @@ function addToCart(){
         image:    product.image,
         price:    disc ? Math.round(product.price - (product.price * disc / 100)) : product.price,
         discount: disc,
+        section:  product.section  || "",
+        category: product.category || "",
+        type:     product.type     || "",
+        colour:   product.colour   || "",
+        rating:   product.rating   || 4.5,
     };
 
     let cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];

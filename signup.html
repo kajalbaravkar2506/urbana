@@ -50,18 +50,66 @@
 <div id="footer"></div>
 <script src="common.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => { loadLayout(); });
+document.addEventListener("DOMContentLoaded", () => {
+    loadLayout();
+    document.querySelectorAll(".auth-card input").forEach(inp => {
+        inp.addEventListener("input", () => clearError(inp.id));
+    });
+});
+
+function setError(id, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.borderColor = "#e74c3c";
+    el.style.background  = "#fff8f8";
+    let err = document.getElementById("err-" + id);
+    if (!err) {
+        err = document.createElement("div");
+        err.id = "err-" + id;
+        err.style.cssText = "color:#e74c3c;font-size:11px;font-weight:600;margin-top:5px;";
+        el.parentNode.insertBefore(err, el.nextSibling);
+    }
+    err.textContent = msg;
+}
+
+function clearError(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.borderColor = "";
+    el.style.background  = "";
+    const err = document.getElementById("err-" + id);
+    if (err) err.textContent = "";
+}
+
 function createAccount() {
-    const fname = document.getElementById("fname").value.trim();
-    const lname = document.getElementById("lname").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const mobile = document.getElementById("mobile").value.trim();
-    const password = document.getElementById("password").value.trim();
-    if (!fname || !lname) { alert("Please enter your full name"); return; }
-    if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/i.test(email)) { alert("Please enter a valid email address"); return; }
-    if (mobile.length !== 10) { alert("Please enter a valid 10-digit mobile number"); return; }
-    if (password.length < 6) { alert("Password must be at least 6 characters"); return; }
-    window.location.href = "login.html";
+    ["fname","lname","email","mobile","password"].forEach(clearError);
+
+    const fname    = document.getElementById("fname").value.trim();
+    const lname    = document.getElementById("lname").value.trim();
+    const email    = document.getElementById("email").value.trim().toLowerCase();
+    const mobile   = document.getElementById("mobile").value.trim();
+    const password = document.getElementById("password").value;
+    let valid = true;
+
+    if (!fname) { setError("fname", "Enter your first name"); valid = false; }
+    if (!lname) { setError("lname", "Enter your last name"); valid = false; }
+    if (!/^[^ ]+@[^ ]+\.[a-z]{2,3}$/i.test(email)) { setError("email", "Enter a valid email address"); valid = false; }
+    if (mobile.length !== 10) { setError("mobile", "Enter a valid 10-digit mobile number"); valid = false; }
+    if (password.length < 6)  { setError("password", "Password must be at least 6 characters"); valid = false; }
+    if (!valid) return;
+
+    const accounts = JSON.parse(localStorage.getItem("urbana-accounts")) || [];
+    if (accounts.find(a => a.email === email)) {
+        setError("email", "An account with this email already exists");
+        return;
+    }
+
+    const now = new Date();
+    const joinedMonth = now.toLocaleString("default", { month: "short" }) + " " + now.getFullYear();
+    accounts.push({ fname, lname, email, mobile, password, joinedMonth });
+    localStorage.setItem("urbana-accounts", JSON.stringify(accounts));
+
+    window.location.href = "login.html?created=1";
 }
 </script>
 </body>

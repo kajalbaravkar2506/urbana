@@ -28,7 +28,7 @@
         <i data-lucide="heart" style="width:64px;height:64px;stroke:#ddd;"></i>
         <div class="empty-text">Your wishlist is empty</div>
         <div class="empty-subtext">Save items you love and come back to them anytime.</div>
-        <a href="index.html" class="empty-btn">START SHOPPING</a>
+        <a href="category.html" class="empty-btn">START SHOPPING</a>
     </div>
 
 </div>
@@ -69,6 +69,14 @@ function removeFromWishlist(idx){
     if(typeof updateBadges === "function") updateBadges();
 }
 
+function showToast(msg){
+    const toast = document.getElementById("toast");
+    if(!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
 function addToCart(idx){
     const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
     const product  = wishlist[idx];
@@ -77,15 +85,16 @@ function addToCart(idx){
 
     if(!size){
         showToast("Please select a size first!");
+        if(sizeEl) sizeEl.focus();
         return;
     }
 
-    const disc     = product.discount || 0;
-    const price    = disc ? Math.round(product.price - (product.price * disc / 100)) : product.price;
+    const disc  = product.discount || 0;
+    const price = disc ? Math.round(product.price - (product.price * disc / 100)) : product.price;
 
+    // Add to cart
     let cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
     const existing = cart.find(item => item.product.id === product.id && item.size === size);
-
     if(existing){
         existing.quantity += 1;
     } else {
@@ -95,10 +104,17 @@ function addToCart(idx){
             quantity: 1
         });
     }
-
     localStorage.setItem("urbana-cart", JSON.stringify(cart));
+
+    // Remove from wishlist
+    wishlist.splice(idx, 1);
+    localStorage.setItem("urbana-wishlist", JSON.stringify(wishlist));
+
     if(typeof updateBadges === "function") updateBadges();
-    showToast("✓ Added to cart!");
+
+    // Re-render then show confirmation toast
+    renderWishlist();
+    showToast("✓ Moved to cart!");
 }
 
 function goToProduct(product){
