@@ -2,8 +2,8 @@ let allProducts = [
 
     // ================= MEN =================
     {section:"men", category:"topwear", type:"tshirts", name:"Men T-Shirt", image:"menclothes/mentshirts.png", price:899, discount:20, colour:"orange", rating:4.2},
-    {section:"men", category:"topwear", type:"casualshirts", name:"Men Casual Shirt", image:"menclothes/mencasualshirts.png", price:1199, discount:15, colour:"green", rating:4.4},
-    {section:"men", category:"topwear", type:"formalshirts", name:"Men Formal Shirt", image:"menclothes/menformalshirts.png", price:1299, discount:10, colour:"dark blue", rating:4.3},
+    {section:"men", category:"topwear", type:"casualshirts", name:"Men Casual Shirt", image:"menclothes/mencasualshirts.png", price:1199, discount:30, colour:"green", rating:4.4},
+    {section:"men", category:"topwear", type:"formalshirts", name:"Men Formal Shirt", image:"menclothes/menformalshirts.png", price:1299, discount:30, colour:"dark blue", rating:4.3},
 
     {section:"men", category:"bottomwear", type:"shorts", name:"Men Shorts", image:"menclothes/menshorts.png", price:699, discount:10, colour:"white", rating:3.9},
     {section:"men", category:"bottomwear", type:"chinos", name:"Men Chinos", image:"menclothes/menchinos.png", price:1199, discount:20, colour:"peach", rating:4.1},
@@ -25,64 +25,63 @@ let allProducts = [
 
 
     // ================= WOMEN =================
-    {section:"women", category:"topwear", type:"tshirts", name:"Women T-Shirt", image:"womenclothes/womentshirts.png", price:699, discount:20, colour:"pink", rating:4.0},
-    {section:"women", category:"topwear", type:"tops", name:"Women Top", image:"womenclothes/womentops.png", price:799, discount:15, colour:"white", rating:3.9},
+    {section:"women", category:"topwear", type:"tshirts", name:"Women T-Shirt", image:"womenclothes/womentshirts.png", price:699, discount:20, colour:"green", rating:4.0},
+    {section:"women", category:"topwear", type:"tops", name:"Women Top", image:"womenclothes/womentops.png", price:799, discount:15, colour:"pink", rating:3.9},
 
     {section:"women", category:"bottomwear", type:"shorts", name:"Women Shorts", image:"womenclothes/womenshorts.png", price:1199, discount:20, colour:"blue", rating:4.2},
-    {section:"women", category:"bottomwear", type:"pants", name:"Women Pants", image:"womenclothes/womenpants.png", price:899, discount:10, colour:"black", rating:4.0},
-    {section:"women", category:"bottomwear", type:"denim", name:"Women Denim", image:"womenclothes/womendenim.png", price:1199, discount:20, colour:"blue", rating:4.2},
+    {section:"women", category:"bottomwear", type:"pants", name:"Women Pants", image:"womenclothes/womenpants.png", price:899, discount:50, colour:"brown", rating:4.0},
+    {section:"women", category:"bottomwear", type:"denim", name:"Women Jeans", image:"womenclothes/womenjeans.png", price:1199, discount:20, colour:"blue", rating:4.2},
 
-    {section:"women", category:"dresses", type:"dresses", name:"Women Dress", image:"womenclothes/womendresses.png", price:999, discount:25, colour:"pink", rating:4.3},
-    {section:"women", category:"dresses", type:"coordsets", name:"Women Co-Ord Set", image:"womenclothes/womencoordsets.png", price:1299, discount:50, colour:"blue", rating:4.5},
+    {section:"women", category:"dresses", type:"dresses", name:"Women Dress", image:"womenclothes/womendresses.png", price:999, discount:25, colour:"dark blue", rating:4.3},
+    {section:"women", category:"dresses", type:"coordsets", name:"Women Co-Ord Set", image:"womenclothes/womencoordsets.png", price:1299, discount:50, colour:"multi", rating:4.5},
 
-    {section:"women", category:"indianwear", type:"kurtas", name:"Women Kurta", image:"womenclothes/womenkurtas.png", price:899, discount:40, colour:"pink", rating:4.6},
-    {section:"women", category:"indianwear", type:"kaftans", name:"Women Kaftan", image:"womenclothes/womenkaftans.png", price:899, discount:40, colour:"pink", rating:4.6},
-    {section:"women", category:"indianwear", type:"leggings", name:"Women Leggings", image:"womenclothes/womenleggings.png", price:899, discount:40, colour:"pink", rating:4.6},
-    {section:"women", category:"indianwear", type:"palazzos", name:"Women Palazzos", image:"womenclothes/womenpalazzos.png", price:899, discount:40, colour:"pink", rating:4.6},
-    {section:"women", category:"indianwear", type:"dupattas", name:"Women Dupatta", image:"womenclothes/womendupattas.png", price:499, discount:15, colour:"black", rating:4.1},
+    {section:"women", category:"indianwear", type:"kurtaset", name:"Women Kurta Set", image:"womenclothes/womenkurtaset.png", price:899, discount:40, colour:"purple", rating:4.6},
+    {section:"women", category:"indianwear", type:"kaftans", name:"Women Kaftan", image:"womenclothes/womenkaftans.png", price:899, discount:40, colour:"green", rating:4.6},
+    {section:"women", category:"indianwear", type:"leggings", name:"Women Leggings", image:"womenclothes/womenleggings.png", price:899, discount:40, colour:"black", rating:4.6},
+    {section:"women", category:"indianwear", type:"palazzos", name:"Women Palazzos", image:"womenclothes/womenpalazzos.png", price:899, discount:40, colour:"green", rating:4.6},
+    {section:"women", category:"indianwear", type:"dupattas", name:"Women Dupatta", image:"womenclothes/womendupattas.png", price:499, discount:15, colour:"red", rating:4.1},
 
-    {section:"women", category:"fusion", type:"kurtis", name:"Women Kurti", image:"womenclothes/womenkurti.png", price:799, discount:30, colour:"white", rating:4.4},
+    {section:"women", category:"fusion", type:"kurtis", name:"Women Kurti", image:"womenclothes/womenkurti.png", price:799, discount:50, colour:"grey", rating:4.4},
     {section:"women", category:"fusion", type:"skirts", name:"Women Skirts", image:"womenclothes/womenskirts.png", price:799, discount:30, colour:"white", rating:4.4},
-    {section:"women", category:"fusion", type:"sareegowns", name:"Women Saree Gown", image:"womenclothes/womensareegowns.png", price:799, discount:30, colour:"white", rating:4.4},
+    {section:"women", category:"fusion", type:"sareegowns", name:"Women Saree Gown", image:"womenclothes/womensareegowns.png", price:799, discount:30, colour:"green", rating:4.4},
 
-    {section:"women", category:"accessories", type:"handbags", name:"Women Handbags", image:"womenclothes/womenhandbags.png", price:799, discount:30, colour:"white", rating:4.4},
+    {section:"women", category:"accessories", type:"handbags", name:"Women Handbags", image:"womenclothes/womenhandbags.png", price:799, discount:30, colour:"brown", rating:4.4},
     {section:"women", category:"accessories", type:"hairaccessories", name:"Hair Accessories", image:"womenclothes/womenhairaccessories.png", price:799, discount:30, colour:"white", rating:4.4},
 
 
     // ================= BOYS =================
-    {section:"boys", category:"topwear", type:"tshirts", name:"Boys T-Shirt", image:"boysclothes/boystshirts.png", price:499, discount:10, colour:"green", rating:4.1},
-    {section:"boys", category:"topwear", type:"shirts", name:"Boys Shirt", image:"boysclothes/boysshirts.png", price:599, discount:15, colour:"blue", rating:4.0},
+    {section:"boys", category:"topwear", type:"tshirts", name:"Boys T-Shirt", image:"boysclothes/boystshirts.png", price:499, discount:10, colour:"yellow", rating:4.1},
+    {section:"boys", category:"topwear", type:"shirts", name:"Boys Shirt", image:"boysclothes/boysshirts.png", price:599, discount:15, colour:"green", rating:4.0},
 
     {section:"boys", category:"bottomwear", type:"cargoshorts", name:"Boys Cargo Shorts", image:"boysclothes/boyscargoshorts.png", price:699, discount:20, colour:"grey", rating:3.9},
-    {section:"boys", category:"bottomwear", type:"cargopants", name:"Boys Cargo Pants", image:"boysclothes/boyscargopants.png", price:799, discount:18, colour:"olive", rating:4.1},
-    {section:"boys", category:"bottomwear", type:"denimshorts", name:"Boys Denim Shorts", image:"boysclothes/boysdenimshorts.png", price:649, discount:15, colour:"blue", rating:4.0},
-    {section:"boys", category:"bottomwear", type:"denimpants", name:"Boys Denim Pants", image:"boysclothes/boysdenimpants.png", price:899, discount:25, colour:"blue", rating:4.3},
-    {section:"boys", category:"bottomwear", type:"joggers", name:"Boys Joggers", image:"boysclothes/boysjoggers.png", price:599, discount:10, colour:"black", rating:4.2},
+    {section:"boys", category:"bottomwear", type:"cargopants", name:"Boys Cargo Pants", image:"boysclothes/boyscargopants.png", price:799, discount:18, colour:"black", rating:4.1},
+    {section:"boys", category:"bottomwear", type:"denimshorts", name:"Boys Denim Shorts", image:"boysclothes/boysdenimshorts.png", price:649, discount:45, colour:"blue", rating:4.0},
+    {section:"boys", category:"bottomwear", type:"denimpants", name:"Boys Denim Pants", image:"boysclothes/boysdenimpants.png", price:899, discount:25, colour:"grey", rating:4.3},
+    {section:"boys", category:"bottomwear", type:"joggers", name:"Boys Joggers", image:"boysclothes/boysjoggers.png", price:599, discount:10, colour:"peach", rating:4.2},
 
-    {section:"boys", category:"innerwear", type:"boxers", name:"Boys Boxers (Pack)", image:"boysclothes/boysboxers.png", price:399, discount:12, colour:"multi", rating:4.0},
-    {section:"boys", category:"innerwear", type:"briefs", name:"Boys Briefs (Pack)", image:"boysclothes/boysbriefs.png", price:349, discount:10, colour:"multi", rating:3.9},
-    {section:"boys", category:"innerwear", type:"vests", name:"Boys Vests (Pack)", image:"boysclothes/boysvests.png", price:349, discount:10, colour:"white", rating:4.0},
+    {section:"boys", category:"innerwear", type:"boxers", name:"Boys Boxers", image:"boysclothes/boysboxers.png", price:399, discount:12, colour:"red", rating:4.0},
+    {section:"boys", category:"innerwear", type:"vests", name:"Boys Vests", image:"boysclothes/boysvests.png", price:349, discount:10, colour:"dark blue", rating:4.0},
 
-    {section:"boys", category:"indianwear", type:"ethnicsets", name:"Boys Ethnic Set", image:"boysclothes/boysethnicsets.png", price:899, discount:30, colour:"white", rating:4.5},
+    {section:"boys", category:"indianwear", type:"ethnicsets", name:"Boys Ethnic Set", image:"boysclothes/boysethnicsets.png", price:899, discount:30, colour:"pink", rating:4.5},
 
-    {section:"boys", category:"outerwear", type:"hoodies", name:"Boys Hoodie", image:"boysclothes/boyshoodies.png", price:899, discount:20, colour:"grey", rating:4.3},
+    {section:"boys", category:"outerwear", type:"hoodies", name:"Boys Hoodie", image:"boysclothes/boyshoodies.png", price:899, discount:40, colour:"red", rating:4.3},
     {section:"boys", category:"outerwear", type:"sweatshirts", name:"Boys Sweatshirt", image:"boysclothes/boyssweatshirts.png", price:799, discount:18, colour:"black", rating:4.2},
-    {section:"boys", category:"outerwear", type:"jackets", name:"Boys Jacket", image:"boysclothes/boysjackets.png", price:1199, discount:25, colour:"blue", rating:4.4},
+    {section:"boys", category:"outerwear", type:"jackets", name:"Boys Jacket", image:"boysclothes/boysjackets.png", price:1199, discount:25, colour:"green", rating:4.4},
 
-    {section:"boys", category:"accessories", type:"caps", name:"Boys Cap", image:"boysclothes/boyscaps.png", price:299, discount:10, colour:"red", rating:4.0},
-    {section:"boys", category:"accessories", type:"belts", name:"Boys Belt", image:"boysclothes/boysbelts.png", price:349, discount:12, colour:"brown", rating:4.1},
+    {section:"boys", category:"accessories", type:"caps", name:"Boys Cap", image:"boysclothes/boyscaps.png", price:299, discount:10, colour:"blue", rating:4.0},
+    {section:"boys", category:"accessories", type:"belts", name:"Boys Belt", image:"boysclothes/boysbelts.png", price:349, discount:12, colour:"grey", rating:4.1},
     {section:"boys", category:"accessories", type:"socks", name:"Boys Socks", image:"boysclothes/boyssocks.png", price:199, discount:8, colour:"white", rating:3.9},
 
     // ================= GIRLS =================
     {section:"girls", category:"topwear", type:"tshirts", name:"Girls T-Shirt", image:"girlsclothes/girltshirts.png", price:899, discount:20, colour:"yellow", rating:4.4},
     {section:"girls", category:"topwear", type:"tops", name:"Girls Top", image:"girlsclothes/girltops.png", price:599, discount:40, colour:"black", rating:4.1},
 
-    {section:"girls", category:"bottomwear", type:"shorts", name:"Girls Shorts", image:"girlsclothes/girlshorts.png", price:899, discount:15, colour:"blue", rating:3.8},
+    {section:"girls", category:"bottomwear", type:"shorts", name:"Girls Shorts", image:"girlsclothes/girlshorts.png", price:899, discount:45, colour:"blue", rating:3.8},
     {section:"girls", category:"bottomwear", type:"skirts", name:"Girls Skirt", image:"girlsclothes/girlskirts.png", price:499, discount:10, colour:"pink", rating:4.2},
     {section:"girls", category:"bottomwear", type:"leggings", name:"Girls Leggings", image:"girlsclothes/girlleggings.png", price:849, discount:50, colour:"purple", rating:4.7},
     {section:"girls", category:"bottomwear", type:"jeans", name:"Girls Jeans", image:"girlsclothes/girljeans.png", price:1499, discount:10, colour:"blue", rating:4.3},
 
-    {section:"girls", category:"dresses", type:"frocks", name:"Girls Frock", image:"girlsclothes/girlfrocks.png", price:999, discount:20, colour:"red", rating:4.5},
+    {section:"girls", category:"dresses", type:"frocks", name:"Girls Frock", image:"girlsclothes/girlfrocks.png", price:999, discount:40, colour:"red", rating:4.5},
     {section:"girls", category:"dresses", type:"dresses", name:"Girls Dress", image:"girlsclothes/girldresses.png", price:999, discount:5, colour:"green", rating:3.7},
     {section:"girls", category:"dresses", type:"jumpsuits", name:"Girls Jumpsuit", image:"girlsclothes/girljumpsuits.png", price:999, discount:15, colour:"orange", rating:4.0},
 
