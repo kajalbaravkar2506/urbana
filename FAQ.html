@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-TYPE html>
 <html lang="en">
 <head>
     <meta name="description" content="Frequently asked questions about Urbana Fashion — orders, returns, shipping and more.">
@@ -66,7 +65,29 @@ TYPE html>
     </div>
 </div>
 <div id="footer"></div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="common.js"></script>
-<script>document.addEventListener("DOMContentLoaded", loadLayout);</script>
+<script src="common.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded",()=>{ if(typeof loadLayout==="function") loadLayout(); });
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof loadLayout === "function") loadLayout();
+    setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 300);
+});
+
+function toggleFAQ(el) {
+    const answer = el.nextElementSibling;
+    const isOpen = el.classList.contains("open");
+
+    // Close all open items
+    document.querySelectorAll(".faq-question.open").forEach(q => {
+        q.classList.remove("open");
+        q.nextElementSibling.classList.remove("open");
+    });
+
+    // If it wasn't open, open it
+    if (!isOpen) {
+        el.classList.add("open");
+        answer.classList.add("open");
+    }
+}
+</script>
+</body>
+</html>
