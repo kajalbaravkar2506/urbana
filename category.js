@@ -69,7 +69,7 @@ let allProducts = [
     {section:"boys", category:"outerwear", type:"jackets", name:"Boys Jacket", image:"boysclothes/boysjackets.png", price:1199, discount:25, colour:"green", rating:4.4},
 
     {section:"boys", category:"accessories", type:"caps", name:"Boys Cap", image:"boysclothes/boyscaps.png", price:299, discount:10, colour:"blue", rating:4.0},
-    {section:"boys", category:"accessories", type:"belts", name:"Boys Belt", image:"boysclothes/boysbelts.png", price:349, discount:12, colour:"grey", rating:4.1},
+    {section:"boys", category:"accessories", type:"belts", name:"Boys Belt", image:"boysclothes/boysbelts.png", price:349, discount:12, colour:"black", rating:4.1},
     {section:"boys", category:"accessories", type:"socks", name:"Boys Socks", image:"boysclothes/boyssocks.png", price:199, discount:8, colour:"white", rating:3.9},
 
     // ================= GIRLS =================

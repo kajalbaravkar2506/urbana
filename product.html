@@ -331,7 +331,7 @@ function addToCart(){
         id:       product.id,
         name:     product.name,
         image:    product.image,
-        price:    disc ? Math.round(product.price - (product.price * disc / 100)) : product.price,
+        price:    product.price,
         discount: disc,
         section:  product.section  || "",
         category: product.category || "",
@@ -537,6 +537,7 @@ function renderReviews(){
 </script>
 
 
+<script>
     // Dynamic page title and meta for SEO
     function updatePageMeta(name, description, price) {
         document.title = (name ? name + ' - ' : '') + 'Urbana Fashion';
@@ -551,6 +552,7 @@ function renderReviews(){
             schema.textContent = JSON.stringify(data, null, 2);
         }
     }
+</script>
 
 </body>
 </html>

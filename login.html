@@ -56,7 +56,6 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     loadLayout();
-    localStorage.removeItem("urbana-user");
     if (new URLSearchParams(window.location.search).get("created") === "1") {
         document.getElementById("signup-success").style.display = "block";
     }

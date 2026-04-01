@@ -99,7 +99,7 @@ function addToCart(idx){
         existing.quantity += 1;
     } else {
         cart.push({
-            product: { id: product.id, name: product.name, image: product.image, price, discount: disc },
+            product: { id: product.id, name: product.name, image: product.image, price: product.price, discount: disc },
             size,
             quantity: 1
         });
