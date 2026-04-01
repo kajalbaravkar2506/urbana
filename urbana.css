@@ -6318,52 +6318,75 @@ body {
 .offers-countdown-label {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 2px;
-    color: #888;
+    letter-spacing: 3px;
+    color: #999;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .countdown {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
     justify-content: flex-end;
 }
 
 .cd-block {
-    background: #111;
-    color: #ffcc00;
-    border-radius: 10px;
-    padding: 10px 14px;
+    background: #1e1e1e;
+    border-radius: 14px;
+    padding: 14px 18px 10px;
     text-align: center;
-    min-width: 56px;
+    min-width: 72px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle shine line at top of block */
+.cd-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: rgba(255,204,0,0.18);
+    border-radius: 1px;
 }
 
 .cd-num {
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 32px;
+    font-weight: 900;
     line-height: 1;
     display: block;
+    color: #ffcc00;
     font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    text-shadow: 0 0 20px rgba(255,204,0,0.4);
 }
 
 .cd-unit {
     font-size: 9px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #ffcc00aa;
-    margin-top: 3px;
+    color: #666;
+    margin-top: 6px;
     display: block;
 }
 
 .cd-sep {
-    font-size: 22px;
-    font-weight: 800;
-    color: #111;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ffcc00;
     line-height: 1;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
+    opacity: 0.6;
+    text-shadow: 0 0 12px rgba(255,204,0,0.3);
+    animation: cdBlink 1s step-start infinite;
+}
+
+@keyframes cdBlink {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 0.15; }
 }
 
 .offers-grid {
