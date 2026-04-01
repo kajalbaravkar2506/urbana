@@ -168,6 +168,11 @@ const COUPONS = { "URBANA10": 10, "SAVE20": 20, "FIRST15": 15 };
 let appliedDiscount = 0;
 let subtotal = 0;
 
+function getDiscountedPrice(product){
+    const disc = product?.discount || 0;
+    return disc ? Math.round((product.price || 0) - ((product.price || 0) * disc / 100)) : (product?.price || 0);
+}
+
 function loadSummary() {
     const cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
     const container = document.getElementById("summary-items");
@@ -185,7 +190,8 @@ function loadSummary() {
     } else {
         subtotal = 0;
         container.innerHTML = cart.map(item => {
-            const price = (item.product?.price || 0) * (item.quantity || 1);
+            const unitPrice = getDiscountedPrice(item.product);
+            const price = unitPrice * (item.quantity || 1);
             subtotal += price;
             const img = item.product?.image
                 ? `<img src="${item.product.image}" alt="${item.product.name}">`
@@ -204,14 +210,31 @@ function loadSummary() {
 }
 
 function updateTotals() {
-    const savings  = appliedDiscount ? Math.round(subtotal * appliedDiscount / 100) : 0;
-    const shipping = (subtotal - savings) >= 999 ? 0 : 49;
-    const total    = subtotal - savings + shipping;
+    const cart = JSON.parse(localStorage.getItem("urbana-cart")) || [];
+    // Product-level savings (MRP - discounted price)
+    const productSavings = cart.reduce((sum, item) => {
+        const disc = item.product?.discount || 0;
+        if (disc) {
+            const mrp = item.product.price || 0;
+            const discounted = Math.round(mrp - mrp * disc / 100);
+            return sum + (mrp - discounted) * (item.quantity || 1);
+        }
+        return sum;
+    }, 0);
+
+    const couponOff = appliedDiscount ? Math.round(subtotal * appliedDiscount / 100) : 0;
+    const shipping = (subtotal - couponOff) >= 999 ? 0 : 49;
+    const total    = subtotal - couponOff + shipping;
     document.getElementById("s-sub").textContent   = "₹" + subtotal.toLocaleString("en-IN");
     document.getElementById("s-total").textContent = "₹" + total.toLocaleString("en-IN");
     const row = document.getElementById("s-savings-row");
-    if (savings > 0) { row.style.display = "flex"; document.getElementById("s-savings").textContent = "-₹" + savings.toLocaleString("en-IN"); }
-    else row.style.display = "none";
+    const totalSavings = productSavings + couponOff;
+    if (totalSavings > 0) {
+        row.style.display = "flex";
+        document.getElementById("s-savings").textContent = "-₹" + totalSavings.toLocaleString("en-IN");
+    } else {
+        row.style.display = "none";
+    }
     const shipEl = document.getElementById("s-shipping");
     if (shipEl) {
         shipEl.textContent = shipping === 0 ? "FREE 🎉" : "₹" + shipping;
@@ -336,11 +359,11 @@ function placeOrder() {
         }
     }
 
-    const savings  = appliedDiscount ? Math.round(subtotal * appliedDiscount / 100) : 0;
-    const shipping = (subtotal - savings) >= 999 ? 0 : 49;
+    const couponOff = appliedDiscount ? Math.round(subtotal * appliedDiscount / 100) : 0;
+    const shipping = (subtotal - couponOff) >= 999 ? 0 : 49;
     sessionStorage.setItem("urbana-order", JSON.stringify({
         fname, lname, email, mobile, addr1, city, state, pin, payment,
-        savings, subtotal, shipping
+        savings: couponOff, subtotal, shipping
     }));
 
     window.location.href = "orderconfirmation.html";

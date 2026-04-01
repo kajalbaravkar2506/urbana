@@ -131,16 +131,22 @@ function saveCart(){
     localStorage.setItem("urbana-cart", JSON.stringify(cart));
 }
 
-function getSubtotal(){
-    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+function getDiscountedPrice(product){
+    const disc = product.discount || 0;
+    return disc ? Math.round(product.price - (product.price * disc / 100)) : product.price;
 }
 
-// How much the user saves vs MRP (only if product has discount field)
+function getSubtotal(){
+    return cart.reduce((sum, item) => sum + getDiscountedPrice(item.product) * item.quantity, 0);
+}
+
+// How much the user saves vs MRP due to product discounts
 function getTotalSavings(){
     return cart.reduce((sum, item) => {
-        if(item.product.discount){
+        const disc = item.product.discount || 0;
+        if(disc){
             const mrp = item.product.price;
-            const discounted = Math.round(mrp - (mrp * item.product.discount / 100));
+            const discounted = getDiscountedPrice(item.product);
             return sum + (mrp - discounted) * item.quantity;
         }
         return sum;
