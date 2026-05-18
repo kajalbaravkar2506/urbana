@@ -10,8 +10,8 @@
         <a href="index.html" aria-label="Urbana Fashion - Home">URBANA</a>
     </h2>
 
-    <!-- MAIN NAVIGATION -->
-    <nav class="choosegender" aria-label="Main navigation" role="navigation">
+    <!-- MAIN NAVIGATION (desktop) -->
+    <nav class="choosegender" id="mainNav" aria-label="Main navigation" role="navigation">
 
         <!-- ================= MEN ================= -->
         <div class="nav-men">
@@ -41,7 +41,6 @@
                     <a href="category.html?section=men&category=athleisure&type=joggers">Joggers</a>
                     <a href="category.html?section=men&category=athleisure&type=sweatshirt">Sweatshirts</a>
                     <a href="category.html?section=men&category=athleisure&type=jacket">Jackets</a>
-
                 </div>
                 <div class="mega-column">
                     <span class="mega-cat-label" role="presentation">INNERWEAR</span>
@@ -126,9 +125,9 @@
                 </div>
                 <div class="mega-column">
                     <span class="mega-cat-label">OUTERWEAR</span>
-                        <a href="category.html?section=boys&category=outerwear&type=hoodies">Hoodies</a>
-                        <a href="category.html?section=boys&category=outerwear&type=sweatshirts">Sweatshirts</a>
-                        <a href="category.html?section=boys&category=outerwear&type=jackets">Jackets</a>
+                    <a href="category.html?section=boys&category=outerwear&type=hoodies">Hoodies</a>
+                    <a href="category.html?section=boys&category=outerwear&type=sweatshirts">Sweatshirts</a>
+                    <a href="category.html?section=boys&category=outerwear&type=jackets">Jackets</a>
                 </div>
                 <div class="mega-column">
                     <span class="mega-cat-label">ACCESSORIES</span>
@@ -183,26 +182,134 @@
 
     <!-- RIGHT SIDE ICONS -->
     <div class="right-icons" role="group" aria-label="Site utilities">
-        <a href="index.html" aria-label="Home">
+        <a href="index.html" aria-label="Home" class="icon-home-desktop">
             <i data-lucide="home" aria-hidden="true"></i>
         </a>
 
         <div class="account-wrap" id="accountWrap"></div>
 
-        <a href="search.html" aria-label="Search">
-            <i data-lucide="search" aria-hidden="true"></i>
-        </a>
+        <a href="search.html" aria-label="Search" class="header-desktop-only">
+    <i data-lucide="search" aria-hidden="true"></i>
+</a>
 
-        <a href="wishlist.html" class="icon-badge-wrap" aria-label="Wishlist" id="headerWishlistIcon">
-            <i data-lucide="heart" aria-hidden="true"></i>
-            <span class="icon-badge" aria-live="polite" aria-label="Wishlist items" id="wishlist-count" style="display:none;">0</span>
-        </a>
+<a href="wishlist.html" class="icon-badge-wrap header-desktop-only" aria-label="Wishlist" id="headerWishlistIcon">
+    <i data-lucide="heart" aria-hidden="true"></i>
+    <span class="icon-badge" aria-live="polite" aria-label="Wishlist items" id="wishlist-count" style="display:none;">0</span>
+</a>
 
-        <a href="cart.html" class="icon-badge-wrap" aria-label="Shopping bag" id="headerCartIcon">
-            <i data-lucide="shopping-bag" aria-hidden="true"></i>
-            <span class="icon-badge" aria-live="polite" aria-label="Cart items" id="cart-count" style="display:none;">0</span>
-        </a>
+<a href="cart.html" class="icon-badge-wrap header-desktop-only" aria-label="Shopping bag" id="headerCartIcon">
+    <i data-lucide="shopping-bag" aria-hidden="true"></i>
+    <span class="icon-badge" aria-live="polite" aria-label="Cart items" id="cart-count" style="display:none;">0</span>
+</a>
+
+        <!-- HAMBURGER (mobile only) -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 
 </div>
 </header>
+
+<!-- ══════════════════════════════════
+     MOBILE DRAWER
+     ══════════════════════════════════ -->
+<div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+    <div class="mobile-drawer-header">
+        <span class="mobile-logo">URBANA</span>
+        <button class="mobile-drawer-close" id="drawerClose" aria-label="Close menu">
+            <i data-lucide="x" style="width:22px;height:22px;"></i>
+        </button>
+    </div>
+
+    <div class="mobile-drawer-body">
+        <!-- SECTION LINKS -->
+        <div class="mobile-section-links">
+            <a href="category.html?section=men" class="mobile-section-pill">Men</a>
+            <a href="category.html?section=women" class="mobile-section-pill">Women</a>
+            <a href="category.html?section=boys" class="mobile-section-pill">Boys</a>
+            <a href="category.html?section=girls" class="mobile-section-pill">Girls</a>
+        </div>
+
+        <!-- ACCORDION MENUS -->
+        <div class="mobile-accordion">
+
+            <div class="mobile-acc-item">
+                <button class="mobile-acc-trigger" aria-expanded="false">
+                    <span>Men's Wear</span>
+                    <i data-lucide="chevron-down" class="acc-chevron"></i>
+                </button>
+                <div class="mobile-acc-panel">
+                    <a href="category.html?section=men&category=topwear&type=tshirts">T-Shirts</a>
+                    <a href="category.html?section=men&category=topwear&type=casualshirts">Casual Shirts</a>
+                    <a href="category.html?section=men&category=topwear&type=formalshirts">Formal Shirts</a>
+                    <a href="category.html?section=men&category=bottomwear&type=jeans">Jeans</a>
+                    <a href="category.html?section=men&category=bottomwear&type=chinos">Chinos</a>
+                    <a href="category.html?section=men&category=bottomwear&type=shorts">Shorts</a>
+                    <a href="category.html?section=men&category=indianwear&type=kurtas">Kurtas</a>
+                    <a href="category.html?section=men&category=athleisure&type=joggers">Joggers</a>
+                    <a href="category.html?section=men">View All Men →</a>
+                </div>
+            </div>
+
+            <div class="mobile-acc-item">
+                <button class="mobile-acc-trigger" aria-expanded="false">
+                    <span>Women's Wear</span>
+                    <i data-lucide="chevron-down" class="acc-chevron"></i>
+                </button>
+                <div class="mobile-acc-panel">
+                    <a href="category.html?section=women&category=topwear&type=tshirts">T-Shirts</a>
+                    <a href="category.html?section=women&category=topwear&type=tops">Tops & Blouses</a>
+                    <a href="category.html?section=women&category=bottomwear&type=denim">Jeans</a>
+                    <a href="category.html?section=women&category=dresses&type=dresses">Dresses</a>
+                    <a href="category.html?section=women&category=dresses&type=coordsets">Co-Ord Sets</a>
+                    <a href="category.html?section=women&category=indianwear&type=kurtaset">Kurta Sets</a>
+                    <a href="category.html?section=women&category=fusion&type=kurtis">Kurtis</a>
+                    <a href="category.html?section=women">View All Women →</a>
+                </div>
+            </div>
+
+            <div class="mobile-acc-item">
+                <button class="mobile-acc-trigger" aria-expanded="false">
+                    <span>Boys' Wear</span>
+                    <i data-lucide="chevron-down" class="acc-chevron"></i>
+                </button>
+                <div class="mobile-acc-panel">
+                    <a href="category.html?section=boys&category=topwear&type=tshirts">T-Shirts</a>
+                    <a href="category.html?section=boys&category=topwear&type=shirts">Shirts</a>
+                    <a href="category.html?section=boys&category=bottomwear&type=cargopants">Cargo Pants</a>
+                    <a href="category.html?section=boys&category=outerwear&type=hoodies">Hoodies</a>
+                    <a href="category.html?section=boys&category=indianwear&type=ethnicsets">Ethnic Sets</a>
+                    <a href="category.html?section=boys">View All Boys →</a>
+                </div>
+            </div>
+
+            <div class="mobile-acc-item">
+                <button class="mobile-acc-trigger" aria-expanded="false">
+                    <span>Girls' Wear</span>
+                    <i data-lucide="chevron-down" class="acc-chevron"></i>
+                </button>
+                <div class="mobile-acc-panel">
+                    <a href="category.html?section=girls&category=topwear&type=tshirts">T-Shirts</a>
+                    <a href="category.html?section=girls&category=bottomwear&type=leggings">Leggings</a>
+                    <a href="category.html?section=girls&category=dresses&type=frocks">Frocks</a>
+                    <a href="category.html?section=girls&category=dresses&type=dresses">Dresses</a>
+                    <a href="category.html?section=girls&category=indianwear&type=kurtas">Kurtas</a>
+                    <a href="category.html?section=girls&category=footwear&type=shoes">Shoes</a>
+                    <a href="category.html?section=girls">View All Girls →</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="mobile-quick-links">
+            <a href="search.html"><i data-lucide="search" style="width:16px;height:16px;"></i> Search</a>
+            <a href="wishlist.html"><i data-lucide="heart" style="width:16px;height:16px;"></i> Wishlist</a>
+            <a href="cart.html"><i data-lucide="shopping-bag" style="width:16px;height:16px;"></i> My Cart</a>
+            <a href="dashboard.html"><i data-lucide="user" style="width:16px;height:16px;"></i> My Account</a>
+        </div>
+    </div>
+</div>
+<!-- Drawer overlay -->
+<div class="mobile-overlay" id="mobileOverlay"></div>

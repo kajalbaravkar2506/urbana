@@ -3,13 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Preconnect to external origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <title>Urbana Fashion - Fresh Styles for Men, Women, Boys & Girls</title>
     <meta name="description" content="Shop trendy fashion for men, women, boys and girls at Urbana. Explore 1000+ styles under ₹999. Easy returns, free delivery.">
-    <link rel="stylesheet" type="text/css" href="urbana.css">
     <link rel="icon" sizes="64x64" href="images/favicon.png">
+
+    <!-- Critical CSS first -->
+    <link rel="stylesheet" type="text/css" href="urbana.css">
+
+    <!-- Non-critical fonts & icons loaded async -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"></noscript>
+
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
+    <!-- Lucide deferred so it doesn't block render -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <script type="application/ld+json">
     {
@@ -36,18 +50,18 @@
     <div class="hero-wrapper">
         <picture>
             <source srcset="images/imageoffamily.webp" type="image/webp">
-            <img src="images/imageoffamily.png" alt="Urbana Fashion family lifestyle" width="1400" height="500" class="hero-img" fetchpriority="high">
+            <img src="images/imageoffamily.png" alt="Urbana Fashion family lifestyle" width="1400" height="500" class="hero-img" fetchpriority="high" loading="eager" decoding="async">
         </picture>
     </div>
 
-    <br><br><br><br>
+    <br><br>
 <h1 class="categories">CATEGORIES</h1>
     <div class="categories-wrapper">
         <div class="categories-grid">
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=girls" aria-label="Shop Girls Dresses">
-                        <img src="images/img1.png" width="210" alt="Girls Dresses">
+                        <img src="images/img1.png" width="210" alt="Girls Dresses" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">GIRLS DRESSES</span>
                 </div>
@@ -55,7 +69,7 @@
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=men&category=topwear" aria-label="Shop Men's Casuals">
-                        <img src="images/img2.png" width="210" alt="Men's Casuals">
+                        <img src="images/img2.png" width="210" alt="Men's Casuals" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">MEN'S CASUALS</span>
                 </div>
@@ -63,7 +77,7 @@
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=men&category=topwear&type=formalshirts" aria-label="Shop Men's Formals">
-                        <img src="images/img3.png" width="210" alt="Men's Formals">
+                        <img src="images/img3.png" width="210" alt="Men's Formals" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">MEN'S FORMALS</span>
                 </div>
@@ -71,7 +85,7 @@
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=boys&category=topwear&type=tshirts" aria-label="Shop Boys T-Shirts">
-                        <img src="images/img4.png" width="210" alt="Boys T-Shirts">
+                        <img src="images/img4.png" width="210" alt="Boys T-Shirts" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">BOYS T-SHIRTS</span>
                 </div>
@@ -79,7 +93,7 @@
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=women&category=indianwear" aria-label="Shop Women's Ethnic">
-                        <img src="images/img5.png" width="210" alt="Women's Ethnic">
+                        <img src="images/img5.png" width="210" alt="Women's Ethnic" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">WOMEN'S ETHNIC</span>
                 </div>
@@ -87,7 +101,7 @@
             <div class="category-item">
                 <div class="item">
                     <a href="category.html?section=women&category=topwear" aria-label="Shop Women's Western">
-                        <img src="images/img6.png" width="210" alt="Women's Western">
+                        <img src="images/img6.png" width="210" alt="Women's Western" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesname">WOMEN'S WESTERN</span>
                 </div>
@@ -104,7 +118,7 @@
             <div class="category-item">
                 <div class="item1">
                     <a href="category.html?maxprice=299">
-                        <img src="images/under299.png" width="450" alt="Shop Under ₹299">
+                        <img src="images/under299.png" width="450" alt="Shop Under ₹299" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesnamebudget">UNDER ₹299</span>
                 </div>
@@ -112,7 +126,7 @@
             <div class="category-item">
                 <div class="item1">
                     <a href="category.html?maxprice=499">
-                        <img src="images/under499.png" width="450" alt="Shop Under ₹499">
+                        <img src="images/under499.png" width="450" alt="Shop Under ₹499" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesnamebudget">UNDER ₹499</span>
                 </div>
@@ -120,7 +134,7 @@
             <div class="category-item">
                 <div class="item1">
                     <a href="category.html?maxprice=799">
-                        <img src="images/under799.png" width="450" alt="Shop Under ₹799">
+                        <img src="images/under799.png" width="450" alt="Shop Under ₹799" loading="lazy" decoding="async">
                     </a>
                     <span class="categoriesnamebudget">UNDER ₹799</span>
                 </div>

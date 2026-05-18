@@ -7,6 +7,7 @@ function loadLayout() {
         if (window.lucide) lucide.createIcons();
         updateBadges();
         updateAccountIcon();
+        initMobileDrawer();
     });
 
     fetch("footer.html")
@@ -40,6 +41,26 @@ function updateBadges() {
     setBadge("cart-count", cartTotal);
     const wishlist = JSON.parse(localStorage.getItem("urbana-wishlist")) || [];
     setBadge("wishlist-count", wishlist.length);
+
+    // Sync mobile bottom nav badges
+    const cartBadge = document.querySelector(".mobile-nav-cart-badge");
+    if (cartBadge) {
+        if (cartTotal > 0) { cartBadge.textContent = cartTotal > 99 ? "99+" : cartTotal; cartBadge.style.display = "flex"; }
+        else { cartBadge.style.display = "none"; }
+    }
+    const wishBadge = document.querySelector(".mobile-nav-wish-badge");
+    if (wishBadge) {
+        if (wishlist.length > 0) { wishBadge.textContent = wishlist.length > 99 ? "99+" : wishlist.length; wishBadge.style.display = "flex"; }
+        else { wishBadge.style.display = "none"; }
+    }
+
+    // Highlight active page in bottom nav
+    const path = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll(".mobile-bottom-nav a").forEach(a => {
+        const href = a.getAttribute("href");
+        if (href && path && href.includes(path)) a.classList.add("active");
+        else a.classList.remove("active");
+    });
 }
 
 function setBadge(id, count) {
@@ -98,4 +119,57 @@ function updateAccountIcon() {
 function logoutUser() {
     localStorage.removeItem("urbana-user");
     window.location.href = "login.html";
+}
+
+function initMobileDrawer() {
+    const btn     = document.getElementById("hamburgerBtn");
+    const drawer  = document.getElementById("mobileDrawer");
+    const overlay = document.getElementById("mobileOverlay");
+    const close   = document.getElementById("drawerClose");
+    if (!btn || !drawer) return;
+
+    function openDrawer() {
+        drawer.classList.add("open");
+        overlay.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
+        btn.classList.add("active");
+        drawer.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        // Re-init lucide icons inside drawer
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDrawer() {
+        drawer.classList.remove("open");
+        overlay.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+        btn.classList.remove("active");
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+    }
+
+    btn.addEventListener("click", openDrawer);
+    if (close) close.addEventListener("click", closeDrawer);
+    if (overlay) overlay.addEventListener("click", closeDrawer);
+
+    // Escape key closes drawer
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+    // Accordion behaviour inside drawer
+    drawer.querySelectorAll(".mobile-acc-trigger").forEach(trigger => {
+        trigger.addEventListener("click", () => {
+            const isOpen = trigger.getAttribute("aria-expanded") === "true";
+            // Close all
+            drawer.querySelectorAll(".mobile-acc-trigger").forEach(t => {
+                t.setAttribute("aria-expanded", "false");
+                t.nextElementSibling.style.maxHeight = null;
+            });
+            // Open this one if it was closed
+            if (!isOpen) {
+                trigger.setAttribute("aria-expanded", "true");
+                const panel = trigger.nextElementSibling;
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+    });
 }

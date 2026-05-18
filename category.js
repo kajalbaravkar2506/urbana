@@ -116,8 +116,11 @@ function buildProductURL(p, idx){
 function loadProducts(section){
     renderProducts(section);
 
-    document.querySelectorAll(".filters-sidebar input").forEach(input => {
-        input.addEventListener("change", () => renderProducts(section));
+    // Listen to all filter checkboxes (in the new filter bar)
+    document.addEventListener("change", function(e) {
+        if (e.target.matches(".colour, .price, .discount")) {
+            renderProducts(section);
+        }
     });
 }
 
@@ -131,7 +134,6 @@ function renderProducts(section){
     const selectedType     = params.get("type");
     const maxPrice         = params.get("maxprice") ? parseInt(params.get("maxprice")) : null;
     const minDiscount      = params.get("mindiscount") ? parseInt(params.get("mindiscount")) : null;
-    // Read sections fresh from URL — supports "sections=boys,girls" for multi-section offers
     const urlSection       = params.get("section");
     const urlSections      = params.get("sections") ? params.get("sections").split(",") : null;
 
@@ -141,7 +143,6 @@ function renderProducts(section){
 
     let filtered = allProducts.map((p,i) => ({...p, _idx:i}));
 
-    // Apply section filter — multi-section (boys,girls) takes priority over single
     if(urlSections){
         filtered = filtered.filter(p => urlSections.includes(p.section));
     } else if(urlSection){
@@ -157,7 +158,6 @@ function renderProducts(section){
         return finalPrice <= maxPrice;
     });
 
-    // Minimum discount filter — used by Special Offers on homepage
     if(minDiscount !== null){
         filtered = filtered.filter(p => (p.discount || 0) >= minDiscount);
     }
@@ -177,8 +177,14 @@ function renderProducts(section){
         filtered = filtered.filter(p => selectedDiscounts.some(d => p.discount >= d));
     }
 
+    // Update result count bar
+    const countBar = document.getElementById("resultCountBar");
+    if (countBar) {
+        countBar.textContent = filtered.length > 0 ? filtered.length + " product" + (filtered.length !== 1 ? "s" : "") : "";
+    }
+
     if(filtered.length === 0){
-        container.innerHTML = `<p style="padding:40px;color:#888;">No products found for this filter.</p>`;
+        container.innerHTML = `<div class="no-products-msg"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>No products match your filters.</p><button onclick="document.getElementById('clearAllFilters').click()" style="margin-top:12px;padding:10px 24px;background:#111;color:white;border:none;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;">Clear Filters</button></div>`;
         return;
     }
 
@@ -195,7 +201,7 @@ function renderProducts(section){
         return `
         <a href="${url}" class="product-card" style="text-decoration:none;color:inherit;">
             <div class="product-image">
-                <img src="${p.image}" alt="${p.name}">
+                <img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
                 <span class="discount-badge">-${p.discount}%</span>
             </div>
             <div class="product-info">
